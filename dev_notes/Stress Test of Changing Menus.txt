@@ -1,0 +1,330 @@
+
+marcus@THEDOLPHIN CLANGARM64 /c/Users/marcus/Documents/Custom C/Main/The 17th App (C Rewrite)
+$ gcc the_17th_app_v3.c c-ya_tokenizer.c -o the17th
+
+marcus@THEDOLPHIN CLANGARM64 /c/Users/marcus/Documents/Custom C/Main/The 17th App (C Rewrite)
+$ ./the17th
+
+Loaded dynamic items: 17
+ -> burger / id=5647 / price=399
+ -> cheeseburger / id=6268 / price=429
+ -> nugget / id=5650 / price=299
+ -> chicken_nugget / id=11375 / price=299
+ -> chicken_tender / id=11367 / price=429
+ -> chicken_sandwich / id=11574 / price=399
+ -> wing / id=5437 / price=499
+ -> onion_ring / id=10979 / price=299
+ -> hotdog / id=5645 / price=199
+ -> fry / id=5337 / price=299
+ -> house_salad / id=11065 / price=900
+ -> caesar_salad / id=11140 / price=900
+ -> soda / id=5423 / price=129
+ -> chocolate_milk / id=11375 / price=99
+ -> white_milk / id=10974 / price=99
+ -> juice / id=5528 / price=129
+ -> water / id=5547 / price=99
+
+What would you like to order?
+/debug
+Token 0: debug
+
+Debug mode enabled!
+
+Available (Future) Commands:
+
+/add_item
+/sub_item
+/test_order
+/reset_order
+/edit_order
+/edit_menu
+/edit_all
+/random_menu
+/random_order
+/restore_menu
+/show_command
+/show_tax
+/change_tax
+/change_menu
+/warning_mode
+/help
+/exit
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+american_breakfast_menu.txt
+
+Loaded new dynamic items: 18
+ -> pancakes_with_bacon / id=16797 / price=399
+ -> three_egg_omelette / id=16706 / price=429
+ -> hash_brown / id=10972 / price=299
+ -> two_sausage_pattie / id=16738 / price=299
+ -> biscuits_and_gravy / id=16730 / price=429
+ -> breakfast_burrito / id=11722 / price=399
+ -> full_lumberjack_combo / id=17019 / price=499
+ -> english_muffin / id=11391 / price=299
+ -> single_donut / id=11196 / price=299
+ -> side_of_fruit / id=16188 / price=199
+ -> slice_of_toast / id=16296 / price=299
+ -> waffle_stack_platter / id=16927 / price=900
+ -> steak_and_eggs_special / id=22002 / price=900
+ -> coffee / id=5616 / price=129
+ -> chocolate_milk / id=11375 / price=99
+ -> white_milk / id=10974 / price=99
+ -> orange_juice / id=11164 / price=129
+ -> water / id=5547 / price=99
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+chinese_authentic_menu.txt
+
+Loaded new dynamic items: 18
+ -> ma_po_tofu / id=15875 / price=399
+ -> kung_pao_chicken / id=16482 / price=429
+ -> sichuan_wonton / id=11424 / price=299
+ -> xiao_long_bao / id=16171 / price=299
+ -> steamed_fish_filet / id=16697 / price=429
+ -> dan_dan_noodle / id=16255 / price=399
+ -> beijing_roast_duck / id=16704 / price=499
+ -> steamed_baozi / id=11272 / price=299
+ -> cucumbers_with_garlic / id=17039 / price=299
+ -> small_bowl_rice / id=16392 / price=199
+ -> side_of_choy_sum / id=21410 / price=299
+ -> whole_steamed_fish / id=16708 / price=900
+ -> braised_pork_belly / id=16710 / price=900
+ -> iced_black_tea / id=16228 / price=129
+ -> hot_oolong_tea / id=16299 / price=99
+ -> hot_milk / id=10760 / price=99
+ -> bottled_beer / id=11164 / price=129
+ -> bottled_water / id=11297 / price=99
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+chinese_takeout_menu.txt
+
+Loaded new dynamic items: 18
+ -> general_tsos_chicken / id=16916 / price=399
+ -> beef_and_broccoli / id=16554 / price=429
+ -> chicken_fried_rice / id=16666 / price=299
+ -> pork_egg_roll / id=16192 / price=299
+ -> sweet_and_sour_pork / id=21760 / price=429
+ -> lo_mein_noodle / id=16285 / price=399
+ -> combo_platter / id=11292 / price=499
+ -> crab_rangoon / id=11164 / price=299
+ -> hot_and_sour_soup / id=21550 / price=299
+ -> fortune_cookie / id=11405 / price=199
+ -> steamed_white_rice / id=16703 / price=299
+ -> family_meal_deal / id=16463 / price=900
+ -> seafood_delight_dinner / id=17114 / price=900
+ -> sweetened_iced_tea / id=16683 / price=129
+ -> hot_jasmine_tea / id=16388 / price=99
+ -> small_milk / id=10966 / price=99
+ -> soda_can / id=10729 / price=129
+ -> bottled_water / id=11297 / price=99
+
+Enter command (non-functional at the moment):
+/debug
+Token 0: debug
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+french_menu.txt
+
+Loaded new dynamic items: 18
+ -> croque_monsieur / id=11537 / price=399
+ -> sandwich_jambon_fromage / id=17217 / price=429
+ -> chicken_pate / id=11151 / price=299
+ -> escargots_a_l_ail / id=21486 / price=299
+ -> crepe_complete / id=11384 / price=429
+ -> quiche_lorraine / id=11499 / price=399
+ -> steak_frite / id=11074 / price=499
+ -> frite / id=5538 / price=299
+ -> potatoes_au_gratin / id=16738 / price=299
+ -> side_salad_simple / id=16588 / price=199
+ -> baguette_and_butter / id=16818 / price=299
+ -> salade_nicoise / id=11364 / price=900
+ -> coq_au_vin / id=15870 / price=900
+ -> cafe_au_lait / id=16039 / price=129
+ -> hot_chocolate / id=11277 / price=99
+ -> white_milk / id=10974 / price=99
+ -> fresh_ju / id=10759 / price=129
+ -> bottled_water / id=11297 / price=99
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+hell's_kitchen_menu.txt
+
+Loaded new dynamic items: 18
+ -> pan_seared_scallop / id=16697 / price=399
+ -> beef_carpaccio / id=11335 / price=429
+ -> chicken_ballotine / id=11679 / price=299
+ -> roasted_duck_breast / id=16818 / price=299
+ -> grilled_salmon_filet / id=16921 / price=399
+ -> lobster_risotto / id=11551 / price=399
+ -> beef_wellington / id=11493 / price=499
+ -> potato_puree / id=11208 / price=299
+ -> side_of_truffle_frie / id=21816 / price=299
+ -> creamed_spinach / id=11463 / price=199
+ -> haricot_vert / id=11195 / price=299
+ -> dry_aged_ribeye_steak / id=21912 / price=900
+ -> chefs_tasting_menu / id=16720 / price=900
+ -> espresso_martini / id=11640 / price=129
+ -> chocolate_lava_cake / id=16770 / price=99
+ -> creme_brulee / id=11163 / price=99
+ -> glass_of_pinot_noir / id=21745 / price=129
+ -> sparkling_water / id=11518 / price=99
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+indian_menu.txt
+
+Loaded new dynamic items: 18
+ -> chicken_tikka_masala / id=16880 / price=399
+ -> lamb_vindaloo / id=11272 / price=429
+ -> chicken_tandoori / id=11589 / price=299
+ -> vegetable_samosa / id=11587 / price=299
+ -> butter_chicken_roll / id=16828 / price=429
+ -> vegetable_biryani / id=11693 / price=399
+ -> thali_platter / id=11294 / price=499
+ -> side_of_naan / id=16048 / price=299
+ -> raita / id=5529 / price=299
+ -> plain_yogurt / id=11214 / price=199
+ -> side_of_rice / id=16053 / price=299
+ -> deluxe_kebab_set / id=16480 / price=900
+ -> paneer_curry_dinner / id=16840 / price=900
+ -> mango_lassi / id=11070 / price=129
+ -> sweet_lassi / id=11092 / price=99
+ -> masala_chai / id=11028 / price=99
+ -> iced_tea / id=10719 / price=129
+ -> bottled_water / id=11297 / price=99
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+mexican_menu.txt
+
+Loaded new dynamic items: 18
+ -> taco_al_pastor / id=16293 / price=399
+ -> carne_asada_taco / id=16450 / price=429
+ -> taquito_de_pollo / id=16526 / price=299
+ -> carnitas_taquito / id=11628 / price=299
+ -> chicken_fajita_bowl / id=16784 / price=429
+ -> bean_and_cheese_burrito / id=22109 / price=399
+ -> quesabirria_taco / id=11599 / price=499
+ -> elote_cup / id=10865 / price=299
+ -> small_guacamole / id=11479 / price=299
+ -> small_side_of_rice / id=21590 / price=199
+ -> side_of_bean / id=16040 / price=299
+ -> large_taco_salad / id=16463 / price=900
+ -> enchilada_platter / id=11685 / price=900
+ -> horchata / id=5842 / price=129
+ -> small_milk / id=10966 / price=99
+ -> water_bottle / id=11197 / price=99
+ -> jamaica / id=5710 / price=129
+ -> tamarindo / id=5959 / price=99
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+bar_food_menu.txt
+
+Loaded new dynamic items: 18
+ -> double_cheeseburger / id=11903 / price=399
+ -> philly_cheesesteak / id=11815 / price=429
+ -> mozzarella_stick / id=11631 / price=299
+ -> boneless_wing / id=11296 / price=299
+ -> spicy_chicken_sandwich / id=17126 / price=429
+ -> patty_melt / id=10996 / price=399
+ -> loaded_nacho / id=11138 / price=499
+ -> basket_of_frie / id=16269 / price=299
+ -> onion_straw / id=11108 / price=299
+ -> side_of_slaw / id=16073 / price=199
+ -> side_of_chili / id=16155 / price=299
+ -> bar_sampler_platter / id=16829 / price=900
+ -> family_burger_deal / id=16695 / price=900
+ -> domestic_draft_beer / id=16799 / price=129
+ -> soda_fountain / id=11291 / price=99
+ -> iced_tea / id=10719 / price=99
+ -> well_mixed_drink / id=16507 / price=129
+ -> bottled_water / id=11297 / price=99
+
+Enter command (non-functional at the moment):
+/change_menu
+Token 0: change_menu
+
+Change the current menu to?
+default_menu.txt
+
+Loaded new dynamic items: 17
+ -> burger / id=5647 / price=399
+ -> cheeseburger / id=6268 / price=429
+ -> nugget / id=5650 / price=299
+ -> chicken_nugget / id=11375 / price=299
+ -> chicken_tender / id=11367 / price=429
+ -> chicken_sandwich / id=11574 / price=399
+ -> wing / id=5437 / price=499
+ -> onion_ring / id=10979 / price=299
+ -> hotdog / id=5645 / price=199
+ -> fry / id=5337 / price=299
+ -> house_salad / id=11065 / price=900
+ -> caesar_salad / id=11140 / price=900
+ -> soda / id=5423 / price=129
+ -> chocolate_milk / id=11375 / price=99
+ -> white_milk / id=10974 / price=99
+ -> juice / id=5528 / price=129
+ -> water / id=5547 / price=99
+
+Enter command (non-functional at the moment):
+/exit
+
+What would you like to order?
+3 large fries
+Token 0: 3
+Token 1: large
+Token 2: fries
+
+Added 3 large fries!
+
+What would you like to order?
+one chicken sandwich
+Token 0: one
+Token 1: chicken
+Token 2: sandwich
+
+Added 1 chicken sandwiches!
+
+What would you like to order?
+show order
+
+Current order:
+3 large fries - $8.97
+1 chicken sandwiches - $3.99
+
+What would you like to order?
+done
+
+The total will be $17.06.
+
+What would you like to order?
