@@ -711,6 +711,96 @@ int load_menu_file(const char *filename, struct AppState *app) {
     return 1; // Shows it was successful.
 }
 
+// Fixes a glitch I discovered with dynamic menus not loading.
+void load_fallback_into_dynamic(struct Menu *menu, struct AppState *app) {
+    app->menu_count = 0;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "burger");
+    dynamic_menu_items[app->menu_count].id = BURGER;
+    dynamic_menu_items[app->menu_count].price = menu->burger;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "cheeseburger");
+    dynamic_menu_items[app->menu_count].id = CHEESEBURGER;
+    dynamic_menu_items[app->menu_count].price = menu->cheeseburger;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "nugget");
+    dynamic_menu_items[app->menu_count].id = NUGGETS;
+    dynamic_menu_items[app->menu_count].price = menu->nuggets;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "chicken_nugget");
+    dynamic_menu_items[app->menu_count].id = CHICKEN_NUGGETS;
+    dynamic_menu_items[app->menu_count].price = menu->nuggets;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "chicken_tender");
+    dynamic_menu_items[app->menu_count].id = CHICKEN_TENDERS;
+    dynamic_menu_items[app->menu_count].price = menu->tenders;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "chicken_sandwich");
+    dynamic_menu_items[app->menu_count].id = CHICKEN_SANDWICH;
+    dynamic_menu_items[app->menu_count].price = menu->chicken_sandwich;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "wing");
+    dynamic_menu_items[app->menu_count].id = WINGS;
+    dynamic_menu_items[app->menu_count].price = menu->wings;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "onion_ring");
+    dynamic_menu_items[app->menu_count].id = ONION_RINGS;
+    dynamic_menu_items[app->menu_count].price = menu->onion_rings;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "hotdog");
+    dynamic_menu_items[app->menu_count].id = HOTDOG;
+    dynamic_menu_items[app->menu_count].price = menu->hotdog;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "fry");
+    dynamic_menu_items[app->menu_count].id = FRIES;
+    dynamic_menu_items[app->menu_count].price = menu->fries;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "house_salad");
+    dynamic_menu_items[app->menu_count].id = HOUSE_SALAD;
+    dynamic_menu_items[app->menu_count].price = menu->house_salad;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "caesar_salad");
+    dynamic_menu_items[app->menu_count].id = CAESAR_SALAD;
+    dynamic_menu_items[app->menu_count].price = menu->caesar_salad;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "soda");
+    dynamic_menu_items[app->menu_count].id = SODA;
+    dynamic_menu_items[app->menu_count].price = menu->soda;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "chocolate_milk");
+    dynamic_menu_items[app->menu_count].id = CHOCOLATE_MILK;
+    dynamic_menu_items[app->menu_count].price = menu->chocolate_milk;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "white_milk");
+    dynamic_menu_items[app->menu_count].id = WHITE_MILK;
+    dynamic_menu_items[app->menu_count].price = menu->white_milk;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "juice");
+    dynamic_menu_items[app->menu_count].id = JUICE;
+    dynamic_menu_items[app->menu_count].price = menu->juice;
+    app->menu_count++;
+
+    strcpy(dynamic_menu_items[app->menu_count].name, "water");
+    dynamic_menu_items[app->menu_count].id = WATER;
+    dynamic_menu_items[app->menu_count].price = menu->water;
+    app->menu_count++;
+}
+
 int get_item_price(int id, struct Menu *fallback_menu, struct AppState *app) {
     int price = match_dynamic_item_id(id, app);
 
@@ -784,8 +874,21 @@ int main() {
 
     struct Order all_orders[100];
 
-    struct Menu menu = make_menu();  // ALWAYS initialize fallback
-    app.loaded_menu = load_menu_file("default_menu.txt", &app);
+    struct Menu menu = make_menu();  // Initializes fallback.
+
+    // Tries to dynamically load the menu file.
+    if (load_menu_file("default_menu.txt", &app) == 0 ||
+        app.menu_count == 0) {
+
+        printf("\nWARNING! Could not load default menu file. Falling back to hardcoded menu.\n");
+
+        // Clear dynamic list
+        app.menu_count = 0;
+
+        load_fallback_into_dynamic(&menu, &app);
+    }
+
+    // app.loaded_menu = load_menu_file("default_menu.txt", &app);
 
     printf("\nLoaded dynamic items: %d\n", app.menu_count);
     for (int i = 0; i < app.menu_count; i++) {
