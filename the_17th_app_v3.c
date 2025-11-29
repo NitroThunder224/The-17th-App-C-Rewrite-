@@ -17,6 +17,7 @@ struct AppState make_app_state() {
     app.show_debug_commands = true;
     app.running = true;
     app.warning = false;
+    app.hard_coded_menu = false;
     app.tax = 7;
     app.menu_count = 0;
     app.order_count = 0;
@@ -339,7 +340,8 @@ void show_command() {
     printf("\n/exit\n"); // Implemented.
 }
 
-void show_menu(struct Menu menu) {
+// Shows a hardcoded menu.
+void show_hardcoded_menu(struct Menu menu) {
     printf("\nBurger: $%.2f\n", menu.burger / 100.0);
     printf("\nCheeseburger: $%.2f\n", menu.cheeseburger / 100.0);
     printf("\nNuggets: $%.2f\n", menu.nuggets / 100.0);
@@ -874,7 +876,7 @@ int main() {
 
     struct Order all_orders[100];
 
-    struct Menu menu = make_menu();  // Initializes fallback.
+    struct Menu menu = make_menu(); // Initializes fallback.
 
     // Tries to dynamically load the menu file.
     if (load_menu_file("default_menu.txt", &app) == 0 ||
@@ -885,10 +887,11 @@ int main() {
         // Clear dynamic list
         app.menu_count = 0;
 
+        // Changes the hard_coded_menu flag to true for the static menu.
+        app.hard_coded_menu = true;
+
         load_fallback_into_dynamic(&menu, &app);
     }
-
-    // app.loaded_menu = load_menu_file("default_menu.txt", &app);
 
     printf("\nLoaded dynamic items: %d\n", app.menu_count);
     for (int i = 0; i < app.menu_count; i++) {
@@ -906,7 +909,7 @@ int main() {
         input[strcspn(input, "\n")] = '\0';  // Removes the newline.
 
         if (strcmp(input, "yes") == 0) {
-            show_menu(menu);
+            show_hardcoded_menu(menu);
         }
 
         else if (strcmp(input, "no") == 0) {
@@ -932,8 +935,14 @@ int main() {
         }
 
         if (strcmp(input, "show menu") == 0) {
-            show_menu(menu);
-            continue;
+            if (app.hard_coded_menu) {
+                show_hardcoded_menu(menu);
+                continue;
+            }
+
+            else {
+                printf("\nFeature not implemented yet, sorry.\n");
+            }
         }
 
         if (strcmp(input, "checkout") == 0 || strcmp(input, "done") == 0) {
