@@ -1,0 +1,17 @@
+burger=399
+cheeseburger=429
+nuggets=299
+chicken_nuggets=299
+chicken_tenders=429
+chicken_sandwich=399
+wings=499
+onion_rings=299
+hotdog=199
+fries=299
+house_salad=900
+caesar_salad=900
+soda=129
+chocolate_milk=99
+white_milk=99
+juice=129
+water=99
