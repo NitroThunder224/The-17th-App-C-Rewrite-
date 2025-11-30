@@ -4,7 +4,7 @@
 #include <time.h> // Added to include the new "/time" command.
 #include "the17th.h"
 
-struct Dynamic_Menu dynamic_menu_items[50];
+struct Dynamic_Menu dynamic_menu_items[200];
 
 struct Menu make_menu();
 struct AppState make_app_state();
@@ -295,13 +295,61 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             }
         }
 
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == COMBINE_MENU) {
+            if (app->warning) {
+                if (warning_prompt(app)) {
+                    printf("\nCombine the current menu with?\n");
+
+                    fgets(secondary_input, sizeof(secondary_input), stdin);
+                    secondary_input[strcspn(secondary_input, "\n")] = '\0';
+
+                    if (ends_with_txt(secondary_input)) {
+
+                        // Skips flushing the menu.
+                        app->loaded_menu = load_menu_file(secondary_input, app);
+
+                        printf("\nLoaded new dynamic items: %d\n", app->menu_count);
+                        for (int i = 0; i < app->menu_count; i++) {
+                            printf(" -> %s / id=%d / price=%d\n", dynamic_menu_items[i].name, dynamic_menu_items[i].id, dynamic_menu_items[i].price);
+                        }
+                    }
+
+                    else {
+                        printf("\n%s does not end with '.txt'.\n", secondary_input);
+                    }
+                }
+            }
+
+            else {
+                printf("\nCombine the current menu with?\n");
+
+                fgets(secondary_input, sizeof(secondary_input), stdin);
+                secondary_input[strcspn(secondary_input, "\n")] = '\0';
+
+                if (ends_with_txt(secondary_input)) {
+
+                    // Skips flushing the menu.
+                    app->loaded_menu = load_menu_file(secondary_input, app);
+
+                    printf("\nLoaded new dynamic items: %d\n", app->menu_count);
+                    for (int i = 0; i < app->menu_count; i++) {
+                        printf(" -> %s / id=%d / price=%d\n", dynamic_menu_items[i].name, dynamic_menu_items[i].id, dynamic_menu_items[i].price);
+                    }
+                }
+
+                else {
+                    printf("\n%s does not end with '.txt'.\n", secondary_input);
+                }
+            }
+        }
+
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == CALCULATOR) {
             calculator_mode(order, app);
         }
 
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == WARNING_MODE) {
             printf("\n0 = False, 1 = True.\n");
-            printf("\nWarning Mode is set %d.", app->warning);
+            printf("\nWarning Mode is currently set %d.", app->warning);
             printf("\nYou are about to change warning to its opposite value.\n");
             printf("\nType 'true' or 'false' for your selection.\n");
 
@@ -374,6 +422,7 @@ void show_upkeep_time(struct AppState *app) {
     app->elapsed_seconds = ((double)clock() / CLOCKS_PER_SEC) - app->start_time;
 
     printf("\nThe System has been running for: %.2f seconds.\n", app->elapsed_seconds);
+    printf("\t\t\t\t %.2f minutes.\n\n", (app->elapsed_seconds / 60.0));
 }
 
 void show_command() {
@@ -392,6 +441,7 @@ void show_command() {
     printf("\n/show_tax"); // Implemented.
     printf("\n/change_tax"); // Implemented.
     printf("\n/change_menu"); // Implemented.
+    printf("\n/combine_menu"); // Implemented.
     printf("\n/calculator"); // Implemented.
     printf("\n/warning_mode"); // Implemented.
     printf("\n/time"); // Implemented.
@@ -759,7 +809,7 @@ int load_menu_file(const char *filename, struct AppState *app) {
         int id = parse_item_words(words, count);
 
         // Stores it into the runtime table (if applicable).
-        if (app->menu_count < 50) {
+        if (app->menu_count < 200) {
             strcpy(dynamic_menu_items[app->menu_count].name, name);
             dynamic_menu_items[app->menu_count].id = id;
             dynamic_menu_items[app->menu_count].price = price;
@@ -988,8 +1038,6 @@ int main() {
         memset(input, 0, sizeof(input)); // Resets the array.
     }
 
-    // /* Beginning of the main loop blockout section.
-
     // The main loop.
     while (app.running == true && app.safe_mode == false) {
         printf("\nWhat would you like to order?\n");
@@ -1023,9 +1071,10 @@ int main() {
             continue;
         }
 
+        // The heart of everything.
         tokenize(input, order_pointer, app_pointer);
 
-        if (order.num == 0 && (order.item > 0 || order.item < 0)) {
+        if (order.num == 0 && order.item != 0) {
             order.num = 1;
         }
 

@@ -336,6 +336,10 @@ bool is_debug_cmd(char word[MAX_LEN], char input[MAX_LEN]) {
         return true;
     }
 
+    else if (strcmp(word, "combine_menu") == 0 && input[0] == FORWARDSLASH) {
+        return true;
+    }
+
     else if (strcmp(word, "calculator") == 0 && input[0] == FORWARDSLASH) {
         return true;
     }

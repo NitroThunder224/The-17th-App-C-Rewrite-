@@ -102,13 +102,14 @@ enum DEBUG {
     SHOW_TAX = -338392567,
     CHANGE_TAX = -2131480260,
     CHANGE_MENU = -1654583506,
+    COMBINE_MENU = 1449510655,
     CALCULATOR = -1138429534,
     WARNING_MODE = -2016204026,
     TIME = 3660141,
     HELP = 3298785,
 };
 
-extern struct Dynamic_Menu dynamic_menu_items[50];
+extern struct Dynamic_Menu dynamic_menu_items[200];
 extern int menu_count;
 
 struct Menu make_menu(void);
