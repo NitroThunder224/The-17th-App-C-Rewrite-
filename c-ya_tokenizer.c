@@ -344,6 +344,10 @@ bool is_debug_cmd(char word[MAX_LEN], char input[MAX_LEN]) {
         return true;
     }
 
+    else if (strcmp(word, "time") == 0 && input[0] == FORWARDSLASH) {
+        return true;
+    }
+
     else if (strcmp(word, "help") == 0 && input[0] == FORWARDSLASH) {
         return true;
     }
@@ -400,7 +404,7 @@ bool is_numword(char word[MAX_LEN]) {
 }
 
 int tokenize(char input[], struct Order *order_pointer, struct AppState *app_pointer) {
-    char tokens[50][200]; // Input with more than 50 tokens is undefined behavior.
+    char tokens[200][200]; // Input with more than 50 tokens is undefined behavior.
     int token_count = 0;
 
     char current_word[200];

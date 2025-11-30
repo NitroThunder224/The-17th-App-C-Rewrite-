@@ -1,6 +1,8 @@
 #ifndef THE_17TH_H
 #define THE_17TH_H
 
+#include <time.h>
+
 struct AppState {
     bool menu_question;
     bool debug;
@@ -13,6 +15,8 @@ struct AppState {
     int menu_count;
     int order_count;
     int loaded_menu;
+    clock_t start_time;
+    double elapsed_seconds;
 
 };
 
@@ -99,6 +103,7 @@ enum DEBUG {
     CHANGE_MENU = -1654583506,
     CALCULATOR = -1138429534,
     WARNING_MODE = -2016204026,
+    TIME = 3660141,
     HELP = 3298785,
 };
 
@@ -114,6 +119,7 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
 void show_hardcoded_menu(struct Menu menu);
 void show_order(struct Order all_orders[], struct Menu *menu, struct AppState *app);
 void show_command();
+void show_upkeep_time(struct AppState *app);
 void checkout(struct Order all_orders[], struct Menu *menu, struct AppState *app);
 void pluralize(char word[200]);
 void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);

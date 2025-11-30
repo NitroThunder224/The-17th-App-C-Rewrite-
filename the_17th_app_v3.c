@@ -1,9 +1,8 @@
 #include "c-ya_tokenizer.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h> // Added to include the new "/time" command.
 #include "the17th.h"
-
-#define MENU_ASCII 437 + ITEM_CONST
 
 struct Dynamic_Menu dynamic_menu_items[50];
 
@@ -24,6 +23,8 @@ struct AppState make_app_state() {
     app.menu_count = 0;
     app.order_count = 0;
     app.loaded_menu = 0;
+    app.start_time = 0.0;
+    app.elapsed_seconds = 0.0;
 
     return app;
 }
@@ -349,11 +350,23 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             }
         }
 
-        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && (order->debug == SHOW_COMMANDS || order->debug == HELP )) {
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == TIME) {
+            show_upkeep_time(app);
+        }
+
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && (order->debug == SHOW_COMMANDS || order->debug == HELP)) {
             app->show_debug_commands = true;
             show_command();
         }
     }
+}
+
+void show_upkeep_time(struct AppState *app) {
+    clock_t current_time = clock();
+
+    app->elapsed_seconds = ((double)clock() / CLOCKS_PER_SEC) - app->start_time;
+
+    printf("\nThe System has been running for: %.2f seconds.\n", app->elapsed_seconds);
 }
 
 void show_command() {
@@ -374,6 +387,7 @@ void show_command() {
     printf("\n/change_menu"); // Implemented.
     printf("\n/calculator"); // Implemented.
     printf("\n/warning_mode"); // Implemented.
+    printf("\n/time"); // Implemented.
     printf("\n/help"); // Implemented.
     printf("\n/exit\n"); // Implemented.
 }
@@ -564,7 +578,7 @@ void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
                         }
 
                         else {
-                            printf("\nAdded %d %s!\n", order->num, printable); // For debugging.
+                            printf("\nAdded %d %s!\n", order->num, printable);
                         }
                     }
 
@@ -919,6 +933,11 @@ int main() {
 
     struct Menu menu = make_menu(); // Initializes fallback.
 
+    // Addded on 11-30-2025 at 11:25 AM to incorporate the "/time" command.
+    app.start_time = (double)clock() / CLOCKS_PER_SEC;
+
+    printf("\n(DEBUG) System online. Counting forevermore till shutdown.\n");
+
     // Tries to dynamically load the menu file.
     if (load_menu_file("default_menu.txt", &app) == 0 ||
         app.menu_count == 0) {
@@ -1063,6 +1082,8 @@ int main() {
     }
 
     */ // End of Safe Mode blockout section.
+
+    show_upkeep_time(&app);
 
     return 0;
 }
