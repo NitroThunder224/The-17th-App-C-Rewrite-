@@ -523,21 +523,6 @@ void checkout(struct Order all_orders[], struct Menu *menu, struct AppState *app
 
 void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app) {
     for (int i = 0; i < app->menu_count; i++) {
-
-        // An attempt to fix the "APPLE BANANA ORANGE WINGS" glitch.
-        if (dynamic_menu_items[i].id == MENU_ASCII) {
-
-            char invalid_id[] = {dynamic_menu_items[i].id};
-
-            if (strcmp(&invalid_id[0], "m")) {
-                break;
-            }
-
-            if (strcmp(&invalid_id[0], "w")) {
-                ;
-            }
-        }
-
         if (order->item == dynamic_menu_items[i].id) {
 
             // Allocates a buffer to hold the name.
@@ -579,7 +564,7 @@ void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
                         }
 
                         else {
-                            printf("\nAdded APPLE %d %s!\n", order->num, printable); // For debugging.
+                            printf("\nAdded %d %s!\n", order->num, printable); // For debugging.
                         }
                     }
 
@@ -616,7 +601,7 @@ void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
                         }
 
                         else {
-                            printf("\nAdded BANANA %d %s!\n", order->num, printable);
+                            printf("\nAdded %d %s!\n", order->num, printable);
                         }
                     }
 
@@ -642,6 +627,10 @@ void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
 
             else if (order->size == 0 && order->item == 0) {
                 return;
+            }
+
+            else if (order->size == 0 && order->item != 0) {
+                printf("\nAdded %d %s!\n", order->num, printable);
             }
 
             all_orders[app->order_count] = *order;
@@ -745,10 +734,8 @@ int load_menu_file(const char *filename, struct AppState *app) {
             token = strtok(NULL, "_");
         }
 
-        int id = parse_item_words(words, count);
-
         // Generates a unique ID based on the ASCII hashing method.
-        id = ascii_word(name) + ITEM_CONST;
+        int id = parse_item_words(words, count);
 
         // Stores it into the runtime table (if applicable).
         if (app->menu_count < 50) {
@@ -975,6 +962,9 @@ int main() {
         memset(input, 0, sizeof(input)); // Resets the array.
     }
 
+    // /* Beginning of the main loop blockout section.
+
+    // The main loop.
     while (app.running) {
         printf("\nWhat would you like to order?\n");
         fgets(input, sizeof(input), stdin);
@@ -1009,11 +999,11 @@ int main() {
 
         tokenize(input, order_pointer, app_pointer);
 
-        if (order.num == 0 && order.item > 0) {
+        if (order.num == 0 && (order.item > 0 || order.item < 0)) {
             order.num = 1;
         }
 
-        if ((order.num > 0 || order.size > 0 || order.item > 0 || order.modifier > 0) && order.debug == 0) {
+        if ((order.num > 0 || order.size != 0 || order.item != 0 || order.modifier != 0) && order.debug == 0) {
             add_item(all_orders, &menu, &order, &app);
             continue;
         }
@@ -1035,6 +1025,44 @@ int main() {
         continue;
 
     }
+
+    // */ End of main loop blockout section.
+
+    /* Beginning of Safe Mode blockout section.
+
+    // Safe Mode.
+    while (app.running) {
+        printf("\nSafe Mode Engaged.\n");
+        printf("\nPlease input the words you want calculated:\n");
+        fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = '\0';
+
+        if (strcmp(input, "/exit") == 0) {
+            break;
+        }
+
+        tokenize(input, &order, &app);
+
+        printf("\nFinal numeric tokens:\n");
+
+        printf("\nnum = %d\n", order.num);
+
+        printf("\nsize(%d) + SIZE_CONST(%d) = %d\n", (SIZE_CONST - order.size), SIZE_CONST, order.size);
+
+        printf("\nitem(%d) + ITEM_CONST(%d) = %d\n", (ITEM_CONST - order.item), ITEM_CONST, order.item);
+
+        printf("\nmodifier(%d) + MODIFIER_CONST(%d) = %d\n", (MODIFIER_CONST - order.modifier),  MODIFIER_CONST, order.modifier);
+
+        if (order.debug > 0) {
+            printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", (DEBUG_CONST - order.debug), DEBUG_CONST, order.debug);
+        }
+
+        else {
+            printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", 0, DEBUG_CONST, order.debug);
+        }
+    }
+
+    */ // End of Safe Mode blockout section.
 
     return 0;
 }

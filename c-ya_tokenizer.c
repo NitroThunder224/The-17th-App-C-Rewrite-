@@ -68,13 +68,15 @@ void join_tokens(char *out, char tokens[][200], int start, int end) {
 }
 
 int ascii_word(char word[MAX_LEN]) {
-    int sum = 0;
+    // Major edit of 11-30-2025, at 4:37 AM EST. Changing to a polynomial rolling hash.
+
+    int hash = 0;
 
     for (int i = 0; word[i] != '\0'; i++) {
-        sum += word[i];
+        hash = hash * 31 + word[i];
     }
 
-    return sum;
+    return hash;
 }
 
 int number_word_to_value(const char *word) {
