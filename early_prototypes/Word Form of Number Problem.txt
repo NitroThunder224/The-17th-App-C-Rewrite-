@@ -1,8 +1,0 @@
-The biggest problem with the parsing method is that it doesn't recognize the word form of numbers (one, five, ninety-nine).
-
-To implement it, I would have to get REAL creative, as the code currently would need a thousands of if and else if statements to do it.
-
-Wait! The code chunks the input and tells me whether it's a number (0-9), a size, an item, or a debug command.
-
-Hmm...
-
