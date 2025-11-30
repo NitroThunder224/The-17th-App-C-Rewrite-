@@ -1,0 +1,55 @@
+For The 17th App (C Rewrite) C file:
+
+Include the official libraries "stdio.h", "string.h", and then include the custom headers "the17thapp.h" and "c-ya_tokenizer.h".
+
+Make the struct "Dynamic_Menu" of "dynamic_menu_items[50]" available to all functions, and set integer "menu_count" to zero.
+
+Declare the prototype "struct Menu make_menu".
+
+Then the function "struct Menu make_menu", which takes the return type of struct menu, and create the values of all the menu items.
+
+Return the menu.
+
+For the void function "show_menu", which takes the argument of struct Menu menu, pretty print all the available default menu items.
+
+The void function "pluralize", which takes the argument of "char word[200]", take whatever word/string provided and pluralize it if not already.
+
+For the integer function "load_menu_file", which takes the constant character of pointer filename, open the file and read it. If the file doesn't exist, return 0. Otherwise, create a char array of name (200) and the integer price. While the statement "fscanf(file, "%199[^=]=%d\n", name, &price) == 2" is true, singularize the name and make it look nice. Then set integer id equal to the function "parse_item_words" of words and count. Later, store the name, id, and price into the runtime table and post-increment the menu_count.
+
+Close the file and return 1 to show success.
+
+For the integer function "get_item_price", which takes integer id and the fallback menu, search through the dynamic menu first and return a price if the IDs match.
+
+If not, fall back to the hardcoded menu, which uses switch statements on the id.
+
+Return -1 if the item wasn't found anywhere.
+
+For the integer function "match_dynamic_item_id" of int id, if the IDs match in the for loop return the price of the item.
+
+For the main loop, set integer total to zero but set tax to 7. Create a char arry of input (200). Make the struct Order accessible through "order". Set the order pointer to order. Load the menu through the function "make_menu". The integer "loaded" is equal to the function "load_menu_file" of "menu.txt".
+
+Print the dynamic menu items' name, ID, and price.
+
+Have the booleans "menu_question" (false), "debug" (true), and "running" (true) exist.
+
+If the menu_question is true, print the welcome message and ask if the user wants to see the menu. If yes, execute the show_menu function of menu. If no, continue.
+
+Regardless, reset the array of input for the next question.
+
+While running is true, ask the user what they would like to order. If the user says "quit", quit the application.
+
+Tokenize the input and pass the order pointer.
+
+After tokenizing, if debug is false, the user can make it true by typing "/debug". If debug is true and the input is equal to CHANGE_MENU, set the menu_count to zero to flush the old menu. Set loaded equal to load_menu_file of "mexican_menu.txt" and then print the new dynamic menu items' name, ID, and price.
+
+After all that, print the final numeric tokens of order.num, order.size, order.item, order.modifier, and order.debug.
+
+Set integer price equal to get_item_price of order.item and the address of menu.
+
+Start a for loop where if the order.item is equal to the dynamic_menu_items of i of name, do a series of steps to pluralize the name of the dynamic_menu_item and tell the user that the program has "fakely" added the pluralized name.
+
+If price does not equal -1, take the total and add onto it the order.num multiplied by prce. Print a statement that "says" it added the number of items of items, with the price next to it.
+
+Else, print unknown item.
+
+Return zero.

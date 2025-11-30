@@ -1,0 +1,431 @@
+
+marcus@THEDOLPHIN CLANGARM64 /c/Users/marcus/Documents/Custom C/Main/The 17th App (C Rewrite)
+$ ./the17thv3
+
+Loaded dynamic items: 17
+ -> burger / id=-1377755139 / price=399
+ -> cheeseburger / id=-1921865836 / price=429
+ -> nugget / id=-1034533026 / price=299
+ -> chicken_nugget / id=-1702416088 / price=299
+ -> chicken_tender / id=-1545211866 / price=429
+ -> chicken_sandwich / id=107954189 / price=399
+ -> wing / id=3654547 / price=499
+ -> onion_ring / id=-309058962 / price=299
+ -> hotdog / id=-1211464361 / price=199
+ -> fry / id=106677 / price=299
+ -> house_salad / id=1570942506 / price=900
+ -> caesar_salad / id=-209104889 / price=900
+ -> soda / id=3540833 / price=129
+ -> chocolate_milk / id=-1483041850 / price=99
+ -> white_milk / id=258364921 / price=99
+ -> juice / id=101487848 / price=129
+ -> water / id=112908447 / price=99
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+deluxe_meal
+Token 0: deluxe_meal
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = 0
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+enter
+Token 0: enter
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = 0
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/debug
+Token 0: debug
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(-95458899) + DEBUG_CONST(100000) = 95558899
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/enter
+Token 0: enter
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = 0
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/debug
+Token 0: debug
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(-95458899) + DEBUG_CONST(100000) = 95558899
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/add_item
+Token 0: add_item
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -1236042095
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/sub_item
+Token 0: sub_item
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -2079792046
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/test_order
+Token 0: test_order
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(-2066676065) + DEBUG_CONST(100000) = 2066776065
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/reset_order
+Token 0: reset_order
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -433580290
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/edit_order
+Token 0: edit_order
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -2016235655
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/edit_menu
+Token 0: edit_menu
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -1866130156
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/edit_all
+Token 0: edit_all
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(-1602355692) + DEBUG_CONST(100000) = 1602455692
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/random_menu
+Token 0: random_menu
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -699665925
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/random_order
+Token 0: random_order
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -215582862
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/restore_menu
+Token 0: restore_menu
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(-1648780400) + DEBUG_CONST(100000) = 1648880400
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/show_command
+Token 0: show_command
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -1902863703
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/show_tax
+Token 0: show_tax
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -338392567
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/change_tax
+Token 0: change_tax
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -2131480260
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/change_menu
+Token 0: change_menu
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -1654583506
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/calculator
+Token 0: calculator
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -1138429534
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/warning_mode
+Token 0: warning_mode
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(0) + DEBUG_CONST(100000) = -2016204026
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+/help
+Token 0: help
+
+Final numeric tokens:
+
+num = 0
+
+size(1000) + SIZE_CONST(1000) = 0
+
+item(5000) + ITEM_CONST(5000) = 0
+
+modifier(20000) + MODIFIER_CONST(20000) = 0
+
+debug(-3198785) + DEBUG_CONST(100000) = 3298785
+
+Safe Mode Engaged.
+
+Please input the words you want calculated:
+Token 0: help
+
+Final numeric tokens:
+
+num = 0
+
+
+marcus@THEDOLPHIN CLANGARM64 /c/Users/marcus/Documents/Custom C/Main/The 17th App (C Rewrite)
+$

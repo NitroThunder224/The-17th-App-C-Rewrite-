@@ -1,0 +1,25 @@
+For the C-Ya Tokenizer C file:
+
+Include a bunch of libraries (stdio.h, stdlib.h, stdbool.h, string.h, ctype.h, the custom headers the previous C file and the tokenizer.
+
+Define a series of macro definitions, one section for ASCII values and one for ID constants.
+
+Create a struct called WordNumber with a table array that allows matching of number words to their numeric equivalent.
+
+For the void function "singularize" that has the argument of char pointer word, take any word and singularize it properly.
+
+For the void function "join_tokens" of char pointer out, char tokens[][200], integer start, and intger end; set the array of out[0] equal to '\0'. Start a for loop where integer k equals start, k is less than or equal to end, and k gets post-incremented. In the loop catcatenate the tokens. If k is less than end, replace the underscores to out.
+
+For the integer function "ascii_word" of char word[MAX_LEN], make integer sum equal to zero. Start a for loop where int i is equal to zero, word[i] is not equal to '\0', and i gets post-incremented. In the loop, sum is += to word of i. Return the sum.
+
+For the integer function "number_word_to_value", it takes any number word and converts it to its numeric equivalent.
+
+For the integer function "parse_item_words", it takes any item, converts it using the ascii_word function plus the ITEM_CONST and += into total. Returns total.
+
+For the integer function "parse_modifier_words", it parses much like parse_item_words and adds it to the total using a different constant; returns total.
+
+For the integer function "parse_number_words", it takes any number word and uses the number_word_to_value function to add it properly to the total, which it returns.
+
+For the boolean functions "bool is_number(char word[MAX_LEN])", "bool is_item(char word[MAX_LEN])", "bool is_debug_cmd(char word[MAX_LEN], char input[MAX_LEN])", "bool is_modifier(char word[MAX_LEN])", and "bool is_numword(char word[MAX_LEN])", they all check to see if the token matches the name of the function. Returns true if yes and false if no.
+
+For the integer function "tokenize" (which is way too long to explain without taking hours), it takes the input from the other script, lowercases it and turns it into tokens. Prints the token from zero to whatever and normalizes it using the other functions to make them consistent and constant.
