@@ -1,0 +1,67 @@
+
+marcus@THEDOLPHIN CLANGARM64 /c/Users/marcus/Documents/Custom C/Main/The 17th App (C Rewrite)
+$ ./the17thv3
+
+Loaded dynamic items: 17
+ -> burger / id=5647 / price=399
+ -> cheeseburger / id=6268 / price=429
+ -> nugget / id=5650 / price=299
+ -> chicken_nugget / id=11375 / price=299
+ -> chicken_tender / id=11367 / price=429
+ -> chicken_sandwich / id=11574 / price=399
+ -> wing / id=5437 / price=499
+ -> onion_ring / id=10979 / price=299
+ -> hotdog / id=5645 / price=199
+ -> fry / id=5337 / price=299
+ -> house_salad / id=11065 / price=900
+ -> caesar_salad / id=11140 / price=900
+ -> soda / id=5423 / price=129
+ -> chocolate_milk / id=11375 / price=99
+ -> white_milk / id=10974 / price=99
+ -> juice / id=5528 / price=129
+ -> water / id=5547 / price=99
+
+What would you like to order?
+menu
+Token 0: menu
+
+Added ORANGE 1 wings!
+
+What would you like to order?
+menu
+Token 0: menu
+
+Added APPLE 1 wings!
+
+What would you like to order?
+menu
+Token 0: menu
+
+Added APPLE 1 wings!
+
+What would you like to order?
+menu
+Token 0: menu
+
+Added APPLE 1 wings!
+
+What would you like to order?
+show order
+
+Current order:
+4 wings - $19.96
+
+What would you like to order?
+show menu
+
+Feature not implemented yet, sorry.
+
+What would you like to order?
+
+Feature not implemented yet, sorry.
+
+What would you like to order?
+
+
+marcus@THEDOLPHIN CLANGARM64 /c/Users/marcus/Documents/Custom C/Main/The 17th App (C Rewrite)
+$

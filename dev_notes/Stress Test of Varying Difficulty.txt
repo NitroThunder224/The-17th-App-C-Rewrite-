@@ -1,0 +1,169 @@
+
+marcus@THEDOLPHIN CLANGARM64 /c/Users/marcus/Documents/Custom C/Main/The 17th App (C Rewrite)
+$ gcc the_17th_app_v3.c c-ya_tokenizer.c -o the17thv3
+
+marcus@THEDOLPHIN CLANGARM64 /c/Users/marcus/Documents/Custom C/Main/The 17th App (C Rewrite)
+$ ./the17thv3
+
+Loaded dynamic items: 17
+ -> burger / id=5647 / price=399
+ -> cheeseburger / id=6268 / price=429
+ -> nugget / id=5650 / price=299
+ -> chicken_nugget / id=11375 / price=299
+ -> chicken_tender / id=11367 / price=429
+ -> chicken_sandwich / id=11574 / price=399
+ -> wing / id=5437 / price=499
+ -> onion_ring / id=10979 / price=299
+ -> hotdog / id=5645 / price=199
+ -> fry / id=5337 / price=299
+ -> house_salad / id=11065 / price=900
+ -> caesar_salad / id=11140 / price=900
+ -> soda / id=5423 / price=129
+ -> chocolate_milk / id=11375 / price=99
+ -> white_milk / id=10974 / price=99
+ -> juice / id=5528 / price=129
+ -> water / id=5547 / price=99
+
+What would you like to order?
+supercalifragilisticexpialidocious_wing_sandwichmealmealmealmealmealmealmeal
+Token 0: supercalifragilisticexpialidocious_wing_sandwichmealmealmealmealmealmealmeal
+
+What would you like to order?
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Token 0: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+What would you like to order?
+&&&&&&&&&&&&&&&&&&& large fries
+Token 0:
+Token 1: large
+Token 2: fries
+
+Added 1 large fries!
+
+What would you like to order?
+--...__.._._._..99burger
+Token 0:
+Token 1:
+Token 2: ...__.._._._..99burger
+
+What would you like to order?
+spicy%meal$$chicken###tender
+Token 0: spicymealchickentender
+
+What would you like to order?
+sho menu
+Token 0: sho
+Token 1: menu
+
+Added 1 wings!
+
+What would you like to order?
+burgering
+Token 0: burgering
+
+What would you like to order?
+cheeseburgy
+Token 0: cheeseburgy
+
+What would you like to order?
+cheeseburgerrrrrr
+Token 0: cheeseburgerrrrrr
+
+What would you like to order?
+shwo menu
+Token 0: shwo
+Token 1: menu
+
+Added 1 wings!
+
+What would you like to order?
+one hundred hundred hundred
+Token 0: one
+Token 1: hundred
+Token 2: hundred
+Token 3: hundred
+
+What would you like to order?
+thousand thousand thousand
+Token 0: thousand
+Token 1: thousand
+Token 2: thousand
+
+What would you like to order?
+ninety two hundred ten four
+Token 0: ninety
+Token 1: two
+Token 2: hundred
+Token 3: ten
+Token 4: four
+
+What would you like to order?
+show cheeseburger
+Token 0: show
+Token 1: cheeseburger
+
+Added 1 cheeseburgers!
+
+What would you like to order?
+order menu
+Token 0: order
+Token 1: menu
+
+Added 1 wings!
+
+What would you like to order?
+reset water
+Token 0: reset
+Token 1: water
+
+Added 1 waters!
+
+What would you like to order?
+    - -   - - - -  -
+Token 0:
+Token 1:
+Token 2:
+Token 3:
+Token 4:
+Token 5:
+Token 6:
+Token 7:
+Token 8:
+Token 9:
+Token 10:
+Token 11:
+Token 12:
+Token 13:
+Token 14:
+Token 15:
+Token 16:
+Token 17:
+Token 18:
+Token 19:
+
+What would you like to order?
+1 one two three burger spicy _._._._._ show menu - - - - test_order large fifty
+Token 0: 1
+Token 1: one
+Token 2: two
+Token 3: three
+Token 4: burger
+Token 5: spicy
+Token 6: _._._._._
+Token 7: show
+Token 8: menu
+Token 9:
+Token 10:
+Token 11:
+Token 12:
+Token 13:
+Token 14:
+Token 15:
+Token 16:
+Token 17: test_order
+Token 18: large
+Token 19: fifty
+
+Added 56 large wings!
+
+What would you like to order?
