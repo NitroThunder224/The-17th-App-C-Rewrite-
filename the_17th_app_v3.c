@@ -3,6 +3,8 @@
 #include <string.h>
 #include "the17th.h"
 
+#define MENU_ASCII 437 + ITEM_CONST
+
 struct Dynamic_Menu dynamic_menu_items[50];
 
 struct Menu make_menu();
@@ -147,12 +149,14 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
     struct Order *order_pointer = order;
     struct AppState *app_pointer = app;
 
+    bool calc_running = true;
+
     if (app->show_debug_commands) {
         show_command();
     }
 
     while (app->debugging) {
-        printf("\nEnter command (non-functional at the moment):\n");
+        printf("\nEnter command (getting more functional by the moment):\n");
         fgets(input, sizeof(input), stdin);
         input[strcspn(input, "\n")] = '\0';
 
@@ -291,6 +295,39 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             }
         }
 
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == CALCULATOR) {
+            // Enters a while loop for infinite testing until told otherwise.
+            while (calc_running) {
+                printf("\nPlease input the words you want calculated:\n");
+                fgets(secondary_input, sizeof(secondary_input), stdin);
+                secondary_input[strcspn(secondary_input, "\n")] = '\0';
+
+                if (strcmp(secondary_input, "/exit") == 0) {
+                    break;
+                }
+
+                tokenize(secondary_input, order, app);
+
+                printf("\nFinal numeric tokens:\n");
+
+                printf("\nnum = %d\n", order->num);
+
+                printf("\nsize(%d) + SIZE_CONST(%d) = %d\n", (SIZE_CONST - order->size), SIZE_CONST, order->size);
+
+                printf("\nitem(%d) + ITEM_CONST(%d) = %d\n", (ITEM_CONST - order->item), ITEM_CONST, order->item);
+
+                printf("\nmodifier(%d) + MODIFIER_CONST(%d) = %d\n", (MODIFIER_CONST - order->modifier),  MODIFIER_CONST, order->modifier);
+
+                if (order->debug > 0) {
+                    printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", (DEBUG_CONST - order->debug), DEBUG_CONST, order->debug);
+                }
+
+                else {
+                    printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", 0, DEBUG_CONST, order->debug);
+                }
+            }
+        }
+
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == WARNING_MODE) {
             printf("\n0 = False, 1 = True.\n");
             printf("\nWarning Mode is set %d.", app->warning);
@@ -335,6 +372,7 @@ void show_command() {
     printf("\n/show_tax"); // Implemented.
     printf("\n/change_tax"); // Implemented.
     printf("\n/change_menu"); // Implemented.
+    printf("\n/calculator"); // Implemented.
     printf("\n/warning_mode"); // Implemented.
     printf("\n/help"); // Implemented.
     printf("\n/exit\n"); // Implemented.
@@ -485,6 +523,21 @@ void checkout(struct Order all_orders[], struct Menu *menu, struct AppState *app
 
 void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app) {
     for (int i = 0; i < app->menu_count; i++) {
+
+        // An attempt to fix the "APPLE BANANA ORANGE WINGS" glitch.
+        if (dynamic_menu_items[i].id == MENU_ASCII) {
+
+            char invalid_id[] = {dynamic_menu_items[i].id};
+
+            if (strcmp(&invalid_id[0], "m")) {
+                break;
+            }
+
+            if (strcmp(&invalid_id[0], "w")) {
+                ;
+            }
+        }
+
         if (order->item == dynamic_menu_items[i].id) {
 
             // Allocates a buffer to hold the name.
@@ -526,7 +579,7 @@ void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
                         }
 
                         else {
-                            printf("\nAdded %d %s!\n", order->num, printable);
+                            printf("\nAdded APPLE %d %s!\n", order->num, printable); // For debugging.
                         }
                     }
 
@@ -563,16 +616,13 @@ void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
                         }
 
                         else {
-                            printf("\nAdded %d %s!\n", order->num, printable);
+                            printf("\nAdded BANANA %d %s!\n", order->num, printable);
                         }
                     }
 
                     return;
                 }
             }
-
-            all_orders[app->order_count] = *order;
-            (app->order_count)++;
 
             if (order->size == SMALL) {
                 printf("\nAdded %d small %s!\n", order->num, printable);
@@ -590,9 +640,13 @@ void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
                 printf("\nAdded %d piece %s!\n", order->num, printable);
             }
 
-            else {
-                printf("\nAdded %d %s!\n", order->num, printable);
+            else if (order->size == 0 && order->item == 0) {
+                return;
             }
+
+            all_orders[app->order_count] = *order;
+            (app->order_count)++;
+
             return;
         }
     }
@@ -694,7 +748,7 @@ int load_menu_file(const char *filename, struct AppState *app) {
         int id = parse_item_words(words, count);
 
         // Generates a unique ID based on the ASCII hashing method.
-        // int id = ascii_word(name) + ITEM_CONST;
+        id = ascii_word(name) + ITEM_CONST;
 
         // Stores it into the runtime table (if applicable).
         if (app->menu_count < 50) {
@@ -914,7 +968,7 @@ int main() {
             }
         }
 
-        else if (strcmp(input, "no") == 0) {
+        else {
             ;
         }
 
@@ -961,6 +1015,7 @@ int main() {
 
         if ((order.num > 0 || order.size > 0 || order.item > 0 || order.modifier > 0) && order.debug == 0) {
             add_item(all_orders, &menu, &order, &app);
+            continue;
         }
 
         if ((order.num == 0 && order.size == 0 && order.item == 0 && order.modifier == 0) && order.debug == ENTER) {
@@ -968,12 +1023,16 @@ int main() {
                 app.debugging = true;
                 printf("\nDebug mode enabled!\n");
                 debug_mode(all_orders, &menu, &order, &app);
+                continue;
             }
 
             else {
                 printf("\nDebug mode is hard-coded to be disabled, sorry.\n");
+                continue;
             }
         }
+
+        continue;
 
     }
 

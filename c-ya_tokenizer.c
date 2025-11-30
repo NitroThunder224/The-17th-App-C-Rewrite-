@@ -24,11 +24,6 @@
 #define MAX_MOD_WORDS 20
 #define MAX_NUM_WORDS 20
 
-#define SIZE_CONST 1000 // All sizes will fall in the 1000 to 4999 range.
-#define ITEM_CONST 5000 // All items will fall in the 5000 to 19999 range.
-#define MODIFIER_CONST 20000 // All modifiers will fall in the 20000 to 99999 range.
-#define DEBUG_CONST 100000 // All debugs will be in the 100000's and above.
-
 struct WordNumber table[] = {
     {"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3},
     {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7},
@@ -336,6 +331,10 @@ bool is_debug_cmd(char word[MAX_LEN], char input[MAX_LEN]) {
     }
 
     else if (strcmp(word, "change_menu") == 0 && input[0] == FORWARDSLASH) {
+        return true;
+    }
+
+    else if (strcmp(word, "calculator") == 0 && input[0] == FORWARDSLASH) {
         return true;
     }
 

@@ -8,6 +8,7 @@ struct AppState {
     bool show_debug_commands;
     bool running;
     bool warning;
+    bool hard_coded_menu;
     int tax;
     int menu_count;
     int order_count;
@@ -96,6 +97,7 @@ enum DEBUG {
     SHOW_TAX = 100877,
     CHANGE_TAX = 101042,
     CHANGE_MENU = 101146,
+    CALCULATOR = 101066,
     WARNING_MODE = 101274,
     HELP = 100425,
 };
@@ -109,13 +111,14 @@ char *name_of_item(int id, struct AppState *app);
 
 void *decode_modifier(char *decoded_mod_pointer_1, char *decoded_mod_pointer_2, char *decoded_mod_pointer_3, struct Order order);
 void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);
-void show_menu(struct Menu menu);
+void show_hardcoded_menu(struct Menu menu);
 void show_order(struct Order all_orders[], struct Menu *menu, struct AppState *app);
 void show_command();
 void checkout(struct Order all_orders[], struct Menu *menu, struct AppState *app);
 void pluralize(char word[200]);
 void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);
 void sub_item(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);
+void load_fallback_into_dynamic(struct Menu *menu, struct AppState *app);
 
 bool warning_prompt(struct AppState *app);
 bool ends_with_txt(const char *str);
