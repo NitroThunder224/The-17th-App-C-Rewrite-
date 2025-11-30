@@ -1,6 +1,0 @@
-gcc "the_17th_app_v1 - BEFORE MAIN LOOP CHANGE.c" c-ya_tokenizer.c -o the17thv1
-
-gcc "the_17th_app_v2 - BEFORE APPSTATE STRUCT.c" c-ya_tokenizer.c -o the17thv2
-
-gcc the_17th_app_v3.c c-ya_tokenizer.c -o the17thv3
-
