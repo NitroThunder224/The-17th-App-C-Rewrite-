@@ -909,7 +909,9 @@ int main() {
         input[strcspn(input, "\n")] = '\0';  // Removes the newline.
 
         if (strcmp(input, "yes") == 0) {
-            show_hardcoded_menu(menu);
+            if (app.hard_coded_menu) {
+                show_hardcoded_menu(menu);
+            }
         }
 
         else if (strcmp(input, "no") == 0) {
@@ -942,6 +944,7 @@ int main() {
 
             else {
                 printf("\nFeature not implemented yet, sorry.\n");
+                continue;
             }
         }
 
