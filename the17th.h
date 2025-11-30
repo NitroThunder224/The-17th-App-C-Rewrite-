@@ -11,6 +11,7 @@ struct AppState {
     bool running;
     bool warning;
     bool hard_coded_menu;
+    bool safe_mode;
     int tax;
     int menu_count;
     int order_count;
@@ -116,6 +117,7 @@ char *name_of_item(int id, struct AppState *app);
 
 void *decode_modifier(char *decoded_mod_pointer_1, char *decoded_mod_pointer_2, char *decoded_mod_pointer_3, struct Order order);
 void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);
+void calculator_mode(struct Order *order, struct AppState *app);
 void show_hardcoded_menu(struct Menu menu);
 void show_order(struct Order all_orders[], struct Menu *menu, struct AppState *app);
 void show_command();

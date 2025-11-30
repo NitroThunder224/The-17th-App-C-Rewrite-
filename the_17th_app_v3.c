@@ -19,6 +19,7 @@ struct AppState make_app_state() {
     app.running = true;
     app.warning = false;
     app.hard_coded_menu = false;
+    app.safe_mode = false;
     app.tax = 7;
     app.menu_count = 0;
     app.order_count = 0;
@@ -149,8 +150,6 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
 
     struct Order *order_pointer = order;
     struct AppState *app_pointer = app;
-
-    bool calc_running = true;
 
     if (app->show_debug_commands) {
         show_command();
@@ -297,36 +296,7 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
         }
 
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == CALCULATOR) {
-            // Enters a while loop for infinite testing until told otherwise.
-            while (calc_running) {
-                printf("\nPlease input the words you want calculated:\n");
-                fgets(secondary_input, sizeof(secondary_input), stdin);
-                secondary_input[strcspn(secondary_input, "\n")] = '\0';
-
-                if (strcmp(secondary_input, "/exit") == 0) {
-                    break;
-                }
-
-                tokenize(secondary_input, order, app);
-
-                printf("\nFinal numeric tokens:\n");
-
-                printf("\nnum = %d\n", order->num);
-
-                printf("\nsize(%d) + SIZE_CONST(%d) = %d\n", (SIZE_CONST - order->size), SIZE_CONST, order->size);
-
-                printf("\nitem(%d) + ITEM_CONST(%d) = %d\n", (ITEM_CONST - order->item), ITEM_CONST, order->item);
-
-                printf("\nmodifier(%d) + MODIFIER_CONST(%d) = %d\n", (MODIFIER_CONST - order->modifier),  MODIFIER_CONST, order->modifier);
-
-                if (order->debug > 0) {
-                    printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", (DEBUG_CONST - order->debug), DEBUG_CONST, order->debug);
-                }
-
-                else {
-                    printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", 0, DEBUG_CONST, order->debug);
-                }
-            }
+            calculator_mode(order, app);
         }
 
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == WARNING_MODE) {
@@ -357,6 +327,43 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && (order->debug == SHOW_COMMANDS || order->debug == HELP)) {
             app->show_debug_commands = true;
             show_command();
+        }
+    }
+}
+
+// Enters a while loop for infinite testing until told otherwise.
+void calculator_mode(struct Order *order, struct AppState *app) {
+    bool calc_running = true;
+
+    char input[200];
+
+    while (calc_running) {
+        printf("\nPlease input the words you want calculated:\n");
+        fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = '\0';
+
+        if (strcmp(input, "/exit") == 0) {
+            break;
+        }
+
+        tokenize(input, order, app);
+
+        printf("\nFinal numeric tokens:\n");
+
+        printf("\nnum = %d\n", order->num);
+
+        printf("\nsize(%d) + SIZE_CONST(%d) = %d\n", (SIZE_CONST - order->size), SIZE_CONST, order->size);
+
+        printf("\nitem(%d) + ITEM_CONST(%d) = %d\n", (ITEM_CONST - order->item), ITEM_CONST, order->item);
+
+        printf("\nmodifier(%d) + MODIFIER_CONST(%d) = %d\n", (MODIFIER_CONST - order->modifier),  MODIFIER_CONST, order->modifier);
+
+        if (order->debug > 0) {
+            printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", (DEBUG_CONST - order->debug), DEBUG_CONST, order->debug);
+        }
+
+        else {
+            printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", 0, DEBUG_CONST, order->debug);
         }
     }
 }
@@ -984,7 +991,7 @@ int main() {
     // /* Beginning of the main loop blockout section.
 
     // The main loop.
-    while (app.running) {
+    while (app.running == true && app.safe_mode == false) {
         printf("\nWhat would you like to order?\n");
         fgets(input, sizeof(input), stdin);
         input[strcspn(input, "\n")] = '\0';
@@ -1045,43 +1052,16 @@ int main() {
 
     }
 
-    // */ End of main loop blockout section.
-
-    /* Beginning of Safe Mode blockout section.
-
     // Safe Mode.
-    while (app.running) {
-        printf("\nSafe Mode Engaged.\n");
-        printf("\nPlease input the words you want calculated:\n");
-        fgets(input, sizeof(input), stdin);
-        input[strcspn(input, "\n")] = '\0';
-
-        if (strcmp(input, "/exit") == 0) {
-            break;
-        }
-
-        tokenize(input, &order, &app);
-
-        printf("\nFinal numeric tokens:\n");
-
-        printf("\nnum = %d\n", order.num);
-
-        printf("\nsize(%d) + SIZE_CONST(%d) = %d\n", (SIZE_CONST - order.size), SIZE_CONST, order.size);
-
-        printf("\nitem(%d) + ITEM_CONST(%d) = %d\n", (ITEM_CONST - order.item), ITEM_CONST, order.item);
-
-        printf("\nmodifier(%d) + MODIFIER_CONST(%d) = %d\n", (MODIFIER_CONST - order.modifier),  MODIFIER_CONST, order.modifier);
-
-        if (order.debug > 0) {
-            printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", (DEBUG_CONST - order.debug), DEBUG_CONST, order.debug);
-        }
-
-        else {
-            printf("\ndebug(%d) + DEBUG_CONST(%d) = %d\n", 0, DEBUG_CONST, order.debug);
-        }
+    while (app.running == false && app.safe_mode == true) {
+        printf("\nSafe Mode is Enabled.\n");
+        calculator_mode(&order, &app);
+        break;
     }
 
-    */ // End of Safe Mode blockout section.
+    if (app.running == true && app.safe_mode == true) {
+        printf("\nError! AppState's app.running AND app.safe_mode are both set to true!\nPlease make one false to use the System!\n");
+    }
 
     show_upkeep_time(&app);
 
