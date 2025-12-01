@@ -20,12 +20,15 @@ struct AppState make_app_state() {
     app.warning = false;
     app.hard_coded_menu = false;
     app.safe_mode = false;
+    app.stress_test = true;
     app.tax = 7;
     app.menu_count = 0;
     app.order_count = 0;
     app.loaded_menu = 0;
     app.start_time = 0.0;
     app.elapsed_seconds = 0.0;
+    app.before_action = 0.0;
+    app.after_action = 0.0;
 
     return app;
 }
@@ -376,8 +379,73 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             app->show_debug_commands = true;
             show_command();
         }
+
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == HYPERBOLIC_TIME) {
+            hyperbolic_chamber(order, app);
+        }
     }
 }
+
+// Enters a while loop for infinite testing until told otherwise.
+void hyperbolic_chamber(struct Order *order, struct AppState *app) {
+    app->stress_test = true;
+
+    char input[200];
+    char buffer[64];
+    int number = 0;
+
+    while (app->stress_test) {
+
+        // Gets the number of iterations safely.
+        printf("\nHow many times would you like to stress-test? (/exit to leave)\n");
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        // Allows an exit at the numeric prompt.
+        if (strcmp(buffer, "/exit") == 0) {
+            printf("\nLeaving the Hyperbolic Time Chamber...\n");
+            break;
+        }
+
+        number = atoi(buffer);
+        if (number <= 0) {
+            printf("\nInvalid number. Try again.\n");
+            continue;
+        }
+
+        // Gets the test phrase
+        printf("\nInput a test phrase:\n");
+        fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = '\0';
+
+        if (strcmp(input, "/exit") == 0) {
+            printf("\nLeaving the Hyperbolic Time Chamber...\n");
+            break;
+        }
+
+        // An optional warm-up loop to improve cache consistency.
+        for (int i = 0; i < 1000; i++) {
+            tokenize(input, order, app);
+        }
+
+        // Times the main loop.
+        clock_t start = clock();
+        for (int i = 0; i < number; i++) {
+            tokenize(input, order, app);
+        }
+        clock_t end = clock();
+
+        // Computes the results.
+        double secs = (double)(end - start) / CLOCKS_PER_SEC;
+        double micro = (secs * 1e6) / number;
+
+        printf("\nHyperbolic Time Chamber Results:\n");
+        printf("Iterations : %d\n", number);
+        printf("Total Time : %.6f seconds\n", secs);
+        printf("Average    : %.6f microseconds per call\n", micro);
+    }
+}
+
 
 // Enters a while loop for infinite testing until told otherwise.
 void calculator_mode(struct Order *order, struct AppState *app) {
@@ -445,6 +513,7 @@ void show_command() {
     printf("\n/calculator"); // Implemented.
     printf("\n/warning_mode"); // Implemented.
     printf("\n/time"); // Implemented.
+    printf("\n/hyperbolic_time"); // Implemented.
     printf("\n/help"); // Implemented.
     printf("\n/exit\n"); // Implemented.
 }
@@ -776,6 +845,53 @@ void sub_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
     }
 }
 
+/*
+
+int randomize_menu(struct AppState *app) {
+    char name[200];
+    int price;
+
+    while (1) {
+
+        // Singularizes the name to be correct.
+        char *pointer = name;
+        singularize(pointer);
+
+        //
+        char name_copy[200];
+        strcpy(name_copy, name);
+
+        // split on '_' into words[]
+        char *words[10];
+        int count = 0;
+
+        char *token = strtok(name_copy, "_");
+        while (token && count < 10) {
+            words[count++] = token;
+            token = strtok(NULL, "_");
+        }
+
+        // Generates a unique ID based on the ASCII hashing method.
+        int id = parse_item_words(words, count);
+
+        // Stores it into the runtime table (if applicable).
+        if (app->menu_count < 200) {
+            strcpy(dynamic_menu_items[app->menu_count].name, name);
+            dynamic_menu_items[app->menu_count].id = id;
+            dynamic_menu_items[app->menu_count].price = price;
+            app->menu_count++;
+        }
+
+        else {
+            fprintf(stderr, "Too many menu items, ignoring '%s'.\n", name);
+        }
+    }
+
+    return 1; // Shows it was successful.
+}
+
+*/
+
 int load_menu_file(const char *filename, struct AppState *app) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -1019,6 +1135,9 @@ int main() {
         );
     }
 
+    app.before_action = 0.0;
+    app.after_action = 0.0;
+
     if (app.menu_question) {
         printf("Hello and welcome to The 17th App! Hot new place in town, yeah?\n");
         printf("Would you like to see the menu?\n");
@@ -1036,6 +1155,10 @@ int main() {
         }
 
         memset(input, 0, sizeof(input)); // Resets the array.
+    }
+
+    if (app.stress_test) {
+        printf("\nStress Test Mode is Enabled.\n");
     }
 
     // The main loop.
@@ -1071,7 +1194,6 @@ int main() {
             continue;
         }
 
-        // The heart of everything.
         tokenize(input, order_pointer, app_pointer);
 
         if (order.num == 0 && order.item != 0) {

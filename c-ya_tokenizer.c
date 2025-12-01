@@ -352,6 +352,10 @@ bool is_debug_cmd(char word[MAX_LEN], char input[MAX_LEN]) {
         return true;
     }
 
+    else if (strcmp(word, "hyperbolic_time") == 0 && input[0] == FORWARDSLASH) {
+        return true;
+    }
+
     else if (strcmp(word, "help") == 0 && input[0] == FORWARDSLASH) {
         return true;
     }
@@ -484,7 +488,13 @@ int tokenize(char input[], struct Order *order_pointer, struct AppState *app_poi
 
     // Print tokens to see if it works.
     for (int i = 0; i < token_count; i++) {
-        printf("Token %d: %s\n", i, tokens[i]);
+        if (app_pointer->stress_test) {
+            ;
+        }
+
+        else {
+            printf("Token %d: %s\n", i, tokens[i]);
+        }
 
         if (is_number(tokens[i])) {
             order_pointer->num = atoi(tokens[i]);

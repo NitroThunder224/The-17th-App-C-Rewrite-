@@ -2,6 +2,7 @@
 #define THE_17TH_H
 
 #include <time.h>
+#include <stdlib.h>
 
 struct AppState {
     bool menu_question;
@@ -12,12 +13,15 @@ struct AppState {
     bool warning;
     bool hard_coded_menu;
     bool safe_mode;
+    bool stress_test;
     int tax;
     int menu_count;
     int order_count;
     int loaded_menu;
     clock_t start_time;
     double elapsed_seconds;
+    double before_action;
+    double after_action;
 
 };
 
@@ -106,6 +110,7 @@ enum DEBUG {
     CALCULATOR = -1138429534,
     WARNING_MODE = -2016204026,
     TIME = 3660141,
+    HYPERBOLIC_TIME = -187618753,
     HELP = 3298785,
 };
 
@@ -118,6 +123,7 @@ char *name_of_item(int id, struct AppState *app);
 
 void *decode_modifier(char *decoded_mod_pointer_1, char *decoded_mod_pointer_2, char *decoded_mod_pointer_3, struct Order order);
 void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);
+void hyperbolic_chamber(struct Order *order, struct AppState *app);
 void calculator_mode(struct Order *order, struct AppState *app);
 void show_hardcoded_menu(struct Menu menu);
 void show_order(struct Order all_orders[], struct Menu *menu, struct AppState *app);
