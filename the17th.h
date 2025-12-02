@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 struct AppState {
+    char history[1000][50];
     bool menu_question;
     bool debug;
     bool debugging;
@@ -16,6 +17,7 @@ struct AppState {
     bool random_menu;
     bool safe_mode;
     bool stress_test;
+    int history_index;
     int tax;
     int menu_count;
     int order_count;
@@ -24,7 +26,6 @@ struct AppState {
     double elapsed_seconds;
     double before_action;
     double after_action;
-
 };
 
 struct Menu {
@@ -145,6 +146,7 @@ bool warning_prompt(struct AppState *app);
 bool ends_with_txt(const char *str);
 
 int load_menu_file(const char *filename, struct AppState *app);
+int make_log_file(struct Order all_orders[], struct Menu *menu, struct AppState *app);
 int get_item_price(int id, struct Menu *fallback_menu, struct AppState *app);
 int get_size_price(int size, struct AppState *app);
 int match_dynamic_item_id(int id, struct AppState *app);

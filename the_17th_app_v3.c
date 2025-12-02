@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h> // Added to include the new "/time" command.
+#include <unistd.h> // For dup() and dup2().
 #include "the17th.h"
 
 struct Dynamic_Menu dynamic_menu_items[200];
@@ -24,6 +25,7 @@ struct AppState make_app_state() {
     app.random_menu = false;
     app.safe_mode = false;
     app.stress_test = false;
+    app.history_index = 0;
     app.tax = 7;
     app.menu_count = 0;
     app.order_count = 0;
@@ -32,6 +34,13 @@ struct AppState make_app_state() {
     app.elapsed_seconds = 0.0;
     app.before_action = 0.0;
     app.after_action = 0.0;
+
+    // Initializes the 2D array.
+    for (int i = 0; i < 1000; i++) {
+        for (int j = 0; j < 50; j++) {
+            app.history[i][j] = '\0';
+        }
+    }
 
     return app;
 }
@@ -199,12 +208,22 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
         fgets(input, sizeof(input), stdin);
         input[strcspn(input, "\n")] = '\0';
 
+        char preserved_input[200];
+        strcpy(preserved_input, input);
+
         if (strcmp(input, "/exit") == 0) {
             app->debugging = false;
             continue;
         }
 
         tokenize(input, order_pointer, app_pointer);
+
+        // Loop from m = 0 up to (but not including) 1000.
+        if (app->history_index < 1000) {
+            // Copies the entire token string into the array.
+            strcpy(app->history[app->history_index], preserved_input);
+            app->history_index++;
+        }
 
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == ADD_ITEM) {
             printf("\n(DEBUG) What would you like to add?\n");
@@ -247,8 +266,7 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             // Implemented a branch to prevent unknown items being added when
             // switching menus. -NT224 at 11:15 PM, 12-01-2025.
             if (!app->hard_coded_menu) {
-                for (int i = 0; i < 4; i++) {
-                    strcpy(dynamic_test_order[i], dynamic_menu_items[i].name);
+                for (int i = 0; i < 3; i++) {
                     tokenize(dynamic_test_order[i], order, app);
                     order->num = 1;
                     add_item(all_orders, menu, order, app);
@@ -260,6 +278,13 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             else {
                 for (int i = 0; i < 3; i++) {
                     tokenize(test_order[i], order, app);
+
+                    for (int m = 0; m < 1000; m++) {
+                        for (int r = 0; r < 50; r++) {
+                            app->history[m][r] = tokenize(input, order_pointer, app_pointer);
+                        }
+                    }
+
                     add_item(all_orders, menu, order, app);
                 }
 
@@ -293,6 +318,32 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             }
         }
 
+        /*
+
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == RANDOM_ORDER) {
+            if (app->warning) {
+                if (warning_prompt(app)) {
+                    int random_number = 0;
+
+                    for (int m = 0; m < app->menu_count; m++) {
+                        random_number = rand() + (int)app->start_time;
+
+                        for (;;) {
+                            ;
+                        }
+                    }
+
+
+
+                }
+            }
+
+            else {
+                ;
+            }
+        }
+
+        */
 
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == SHOW_TAX) {
             printf("\nThe current tax rate is $%.2f.\n", app->tax / 100.0);
@@ -396,10 +447,15 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
                         // Skips flushing the menu.
                         app->loaded_menu = load_menu_file(secondary_input, app);
 
-                        printf("\nLoaded new dynamic items: %d\n", app->menu_count);
-                        for (int i = 0; i < app->menu_count; i++) {
-                            printf(" -> %s / id=%d / price=%d\n", dynamic_menu_items[i].name, dynamic_menu_items[i].id, dynamic_menu_items[i].price);
+                        if (app->show_debug_commands) {
+                            printf("\nLoaded new dynamic items: %d\n", app->menu_count);
+
+                            for (int i = 0; i < app->menu_count; i++) {
+                                printf(" -> %s / id=%d / price=%d\n", dynamic_menu_items[i].name, dynamic_menu_items[i].id, dynamic_menu_items[i].price);
+                            }
                         }
+
+                        printf("\nMenus have been combined!\n");
                     }
 
                     else {
@@ -423,10 +479,15 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
                     // Skips flushing the menu.
                     app->loaded_menu = load_menu_file(secondary_input, app);
 
-                    printf("\nLoaded new dynamic items: %d\n", app->menu_count);
-                    for (int i = 0; i < app->menu_count; i++) {
-                        printf(" -> %s / id=%d / price=%d\n", dynamic_menu_items[i].name, dynamic_menu_items[i].id, dynamic_menu_items[i].price);
+                    if (app->show_debug_commands) {
+                        printf("\nLoaded new dynamic items: %d\n", app->menu_count);
+
+                        for (int i = 0; i < app->menu_count; i++) {
+                            printf(" -> %s / id=%d / price=%d\n", dynamic_menu_items[i].name, dynamic_menu_items[i].id, dynamic_menu_items[i].price);
+                        }
                     }
+
+                    printf("\nMenus have been combined!\n");
                 }
 
                 else {
@@ -529,11 +590,20 @@ void hyperbolic_chamber(struct Order *order, struct AppState *app) {
     int number = 0;
 
     while (app->stress_test) {
-
         // Gets the number of iterations safely.
         printf("\nHow many times would you like to stress-test? (/exit to leave)\n");
         fgets(buffer, sizeof(buffer), stdin);
         buffer[strcspn(buffer, "\n")] = '\0';
+
+        char preserved_input[200];
+        strcpy(preserved_input, buffer);
+
+        // Loop from m = 0 up to (but not including) 1000.
+        if (app->history_index < 1000) {
+            // Copies the entire token string into the array.
+            strcpy(app->history[app->history_index], preserved_input);
+            app->history_index++;
+        }
 
         // Allows an exit at the numeric prompt.
         if (strcmp(buffer, "/exit") == 0) {
@@ -552,9 +622,18 @@ void hyperbolic_chamber(struct Order *order, struct AppState *app) {
         fgets(input, sizeof(input), stdin);
         input[strcspn(input, "\n")] = '\0';
 
+        strcpy(preserved_input, input);
+
         if (strcmp(input, "/exit") == 0) {
             printf("\nLeaving the Hyperbolic Time Chamber...\n");
             break;
+        }
+
+        // Loop from m = 0 up to (but not including) 1000.
+        if (app->history_index < 1000) {
+            // Copies the entire token string into the array.
+            strcpy(app->history[app->history_index], preserved_input);
+            app->history_index++;
         }
 
         // An optional warm-up loop to improve cache consistency.
@@ -596,6 +675,16 @@ void calculator_mode(struct Order *order, struct AppState *app) {
 
         if (strcmp(input, "/exit") == 0) {
             break;
+        }
+
+        char preserved_input[200];
+        strcpy(preserved_input, input);
+
+        // Loop from m = 0 up to (but not including) 1000.
+        if (app->history_index < 1000) {
+            // Copies the entire token string into the array.
+            strcpy(app->history[app->history_index], preserved_input);
+            app->history_index++;
         }
 
         tokenize(input, order, app);
@@ -642,7 +731,7 @@ void show_command() {
     // printf("\n/edit_menu");
     // printf("\n/edit_all");
     printf("\n/random_menu"); // Implemented.
-    // printf("\n/random_order");
+    printf("\n/random_order"); // Implemented.
     printf("\n/restore_menu"); // Implemented.
     printf("\n/show_command"); // Implemented.
     printf("\n/show_tax"); // Implemented.
@@ -1058,102 +1147,6 @@ void make_random_menu(struct Order all_orders[], struct Menu *menu, struct AppSt
     printf("\nThe menu items and prices have been randomized!\n");
 }
 
-/*
-
-int randomize_menu(struct AppState *app) {
-    char name[200];
-    int price;
-
-    while (1) {
-
-        // Singularizes the name to be correct.
-        char *pointer = name;
-        singularize(pointer);
-
-        //
-        char name_copy[200];
-        strcpy(name_copy, name);
-
-        // split on '_' into words[]
-        char *words[10];
-        int count = 0;
-
-        char *token = strtok(name_copy, "_");
-        while (token && count < 10) {
-            words[count++] = token;
-            token = strtok(NULL, "_");
-        }
-
-        // Generates a unique ID based on the ASCII hashing method.
-        int id = parse_item_words(words, count);
-
-        // Stores it into the runtime table (if applicable).
-        if (app->menu_count < 200) {
-            strcpy(dynamic_menu_items[app->menu_count].name, name);
-            dynamic_menu_items[app->menu_count].id = id;
-            dynamic_menu_items[app->menu_count].price = price;
-            app->menu_count++;
-        }
-
-        else {
-            fprintf(stderr, "Too many menu items, ignoring '%s'.\n", name);
-        }
-    }
-
-    return 1; // Shows it was successful.
-}
-
-*/
-
-int load_menu_file(const char *filename, struct AppState *app) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        return 0; // The file is missing.
-    }
-
-    char name[200];
-    int price;
-
-    while (fscanf(file, "%199[^=]=%d\n", name, &price) == 2) {
-
-        // Singularizes the name to be correct.
-        char *pointer = name;
-        singularize(pointer);
-
-        //
-        char name_copy[200];
-        strcpy(name_copy, name);
-
-        // split on '_' into words[]
-        char *words[10];
-        int count = 0;
-
-        char *token = strtok(name_copy, "_");
-        while (token && count < 10) {
-            words[count++] = token;
-            token = strtok(NULL, "_");
-        }
-
-        // Generates a unique ID based on the ASCII hashing method.
-        int id = parse_item_words(words, count);
-
-        // Stores it into the runtime table (if applicable).
-        if (app->menu_count < 200) {
-            strcpy(dynamic_menu_items[app->menu_count].name, name);
-            dynamic_menu_items[app->menu_count].id = id;
-            dynamic_menu_items[app->menu_count].price = price;
-            app->menu_count++;
-        }
-
-        else {
-            fprintf(stderr, "Too many menu items, ignoring '%s'.\n", name);
-        }
-    }
-
-    fclose(file);
-    return 1; // Shows it was successful.
-}
-
 // Fixes a glitch I discovered with dynamic menus not loading.
 void load_fallback_into_dynamic(struct Menu *menu, struct AppState *app) {
     app->menu_count = 0;
@@ -1242,6 +1235,119 @@ void load_fallback_into_dynamic(struct Menu *menu, struct AppState *app) {
     dynamic_menu_items[app->menu_count].id = WATER;
     dynamic_menu_items[app->menu_count].price = menu->water;
     app->menu_count++;
+}
+
+int make_log_file(struct Order all_orders[], struct Menu *menu, struct AppState *app) {
+    time_t current_time_seconds;
+    time_t time_current;
+    struct tm *local_time_info;
+
+    current_time_seconds = time(NULL);
+    time(&time_current);
+    local_time_info = localtime(&current_time_seconds);
+
+    app->elapsed_seconds = ((double)clock() / CLOCKS_PER_SEC) - app->start_time;
+
+    fflush(stdout);
+
+    int saved_stdout_fd = dup(fileno(stdout));
+    if (saved_stdout_fd == -1) {
+        printf("\nError duplicating stdout. Logging skipped.\n");
+        return 0;
+    }
+
+    FILE *file = freopen("./logs/log.txt", "a", stdout);
+    if (file == NULL) {
+        dup2(saved_stdout_fd, fileno(stdout));
+        close(saved_stdout_fd);
+        printf("\nError opening log file. Skipping...\n");
+        return 0;
+    }
+
+    if (!app->safe_mode) {
+        printf("--------------------------------------\n[%02d/%02d/%04d] %s\nThe System ran in Normal/Debug Mode for: %.2f seconds.\n\t\t    %.2f minutes.\n",
+           local_time_info->tm_mon + 1,
+           local_time_info->tm_mday,
+           local_time_info->tm_year + 1900,
+           ctime(&time_current),
+           app->elapsed_seconds,
+           (app->elapsed_seconds / 60.0));
+    }
+
+    else {
+        printf("--------------------------------------\n[%02d/%02d/%04d] %s\nThe System ran in Safe Mode for: %.2f seconds.\n\t\t    %.2f minutes.\n",
+               local_time_info->tm_mon + 1,
+               local_time_info->tm_mday,
+               local_time_info->tm_year + 1900,
+               ctime(&time_current),
+               app->elapsed_seconds,
+               (app->elapsed_seconds / 60.0));
+    }
+
+    show_order(all_orders, menu, app);
+    printf("\n\nInputs used:\n");
+
+    for (int i = 0; i < app->history_index; i++) {
+        printf("%d. %s\n", i, app->history[i]);
+    }
+
+    fflush(stdout);
+
+    dup2(saved_stdout_fd, fileno(stdout));
+    close(saved_stdout_fd);
+
+    printf("\nLog file has been made.\n");
+
+    return 1;
+}
+
+int load_menu_file(const char *filename, struct AppState *app) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        return 0; // The file is missing.
+    }
+
+    char name[200];
+    int price;
+
+    while (fscanf(file, "%199[^=]=%d\n", name, &price) == 2) {
+
+        // Singularizes the name to be correct.
+        char *pointer = name;
+        singularize(pointer);
+
+        //
+        char name_copy[200];
+        strcpy(name_copy, name);
+
+        // split on '_' into words[]
+        char *words[10];
+        int count = 0;
+
+        char *token = strtok(name_copy, "_");
+        while (token && count < 10) {
+            words[count++] = token;
+            token = strtok(NULL, "_");
+        }
+
+        // Generates a unique ID based on the ASCII hashing method.
+        int id = parse_item_words(words, count);
+
+        // Stores it into the runtime table (if applicable).
+        if (app->menu_count < 200) {
+            strcpy(dynamic_menu_items[app->menu_count].name, name);
+            dynamic_menu_items[app->menu_count].id = id;
+            dynamic_menu_items[app->menu_count].price = price;
+            app->menu_count++;
+        }
+
+        else {
+            fprintf(stderr, "Too many menu items, ignoring '%s'.\n", name);
+        }
+    }
+
+    fclose(file);
+    return 1; // Shows it was successful.
 }
 
 int get_item_price(int id, struct Menu *fallback_menu, struct AppState *app) {
@@ -1410,6 +1516,16 @@ int main() {
         fgets(input, sizeof(input), stdin);
         input[strcspn(input, "\n")] = '\0';
 
+        char preserved_input[200];
+        strcpy(preserved_input, input);
+
+        // Loop from m = 0 up to (but not including) 1000.
+        if (app.history_index < 1000) {
+            // Copies the entire token string into the array.
+            strcpy(app.history[app.history_index], preserved_input);
+            app.history_index++;
+        }
+
         if (strcmp(input, "quit") == 0) {
             app.running = false;
             continue;
@@ -1477,6 +1593,7 @@ int main() {
     }
 
     show_upkeep_time(&app);
+    make_log_file(all_orders, &menu, &app);
 
     return 0;
 }
