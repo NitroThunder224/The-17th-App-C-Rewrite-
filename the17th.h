@@ -13,6 +13,7 @@ struct AppState {
     bool running;
     bool warning;
     bool hard_coded_menu;
+    bool random_menu;
     bool safe_mode;
     bool stress_test;
     int tax;
@@ -108,6 +109,7 @@ enum DEBUG {
     CHANGE_TAX = -2131480260,
     CHANGE_MENU = -1654583506,
     COMBINE_MENU = 1449510655,
+    DELETE_MENU = -1121934829,
     CALCULATOR = -1138429534,
     WARNING_MODE = -2016204026,
     TIME = 3660141,
@@ -137,6 +139,7 @@ void pluralize(char word[200]);
 void add_item(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);
 void sub_item(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);
 void load_fallback_into_dynamic(struct Menu *menu, struct AppState *app);
+void make_random_menu(struct Order all_orders[], struct Menu *menu, struct AppState *app);
 
 bool warning_prompt(struct AppState *app);
 bool ends_with_txt(const char *str);

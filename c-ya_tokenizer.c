@@ -344,6 +344,10 @@ bool is_debug_cmd(char word[MAX_LEN], char input[MAX_LEN]) {
         return true;
     }
 
+    else if (strcmp(word, "delete_menu") == 0) {
+        return true;
+    }
+
     else if (strcmp(word, "calculator") == 0) {
         return true;
     }

@@ -13,7 +13,7 @@ struct AppState make_app_state();
 struct AppState make_app_state() {
     struct AppState app;
 
-    app.menu_question = true;
+    app.menu_question = false;
     app.debug = true;
     app.debugging = true;
     app.show_debug_commands = true;
@@ -21,6 +21,7 @@ struct AppState make_app_state() {
     app.running = true;
     app.warning = true;
     app.hard_coded_menu = false;
+    app.random_menu = false;
     app.safe_mode = false;
     app.stress_test = false;
     app.tax = 7;
@@ -238,6 +239,34 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             }
         }
 
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == TEST_ORDER) {
+            char test_order[3][20] = {"1 chicken sandwich", "1 large fry", "one large soda"};
+
+            char dynamic_test_order[3][20];
+
+            // Implemented a branch to prevent unknown items being added when
+            // switching menus. -NT224 at 11:15 PM, 12-01-2025.
+            if (!app->hard_coded_menu) {
+                for (int i = 0; i < 4; i++) {
+                    strcpy(dynamic_test_order[i], dynamic_menu_items[i].name);
+                    tokenize(dynamic_test_order[i], order, app);
+                    order->num = 1;
+                    add_item(all_orders, menu, order, app);
+                }
+
+                printf("\nDynamic test order was loaded!\n");
+            }
+
+            else {
+                for (int i = 0; i < 3; i++) {
+                    tokenize(test_order[i], order, app);
+                    add_item(all_orders, menu, order, app);
+                }
+
+                printf("\nHardcoded test order was loaded!\n");
+            }
+        }
+
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == RESET_ORDER) {
             if (app->warning) {
                 if (warning_prompt(app)) {
@@ -251,6 +280,19 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
                 printf("\nThe order has been reset.\n");
             }
         }
+
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == RANDOM_MENU) {
+            if (app->warning) {
+                if (warning_prompt(app)) {
+                    make_random_menu(order, menu, app);
+                }
+            }
+
+            else {
+                make_random_menu(order, menu, app);
+            }
+        }
+
 
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == SHOW_TAX) {
             printf("\nThe current tax rate is $%.2f.\n", app->tax / 100.0);
@@ -296,6 +338,8 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
                     if (ends_with_txt(secondary_input)) {
                         app->menu_count = 0;
 
+                        app->random_menu = false;
+
                         app->loaded_menu = load_menu_file(secondary_input, app);
 
                         printf("\nLoaded new dynamic items: %d\n", app->menu_count);
@@ -318,6 +362,8 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
 
                 if (ends_with_txt(secondary_input)) {
                     app->menu_count = 0;
+
+                    app->random_menu = false;
 
                     app->loaded_menu = load_menu_file(secondary_input, app);
 
@@ -343,6 +389,10 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
 
                     if (ends_with_txt(secondary_input)) {
 
+                        // Disbables the flags to prevent confusion.
+                        app->random_menu = false;
+                        app->hard_coded_menu = false;
+
                         // Skips flushing the menu.
                         app->loaded_menu = load_menu_file(secondary_input, app);
 
@@ -366,6 +416,10 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
 
                 if (ends_with_txt(secondary_input)) {
 
+                    // Disbables the flags to prevent confusion.
+                    app->random_menu = false;
+                    app->hard_coded_menu = false;
+
                     // Skips flushing the menu.
                     app->loaded_menu = load_menu_file(secondary_input, app);
 
@@ -381,8 +435,53 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             }
         }
 
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == DELETE_MENU) {
+            if (app->warning) {
+                if (warning_prompt(app)) {
+                    printf("\nAre you sure? This will make the menu nonexistent.\n");
+
+                    fgets(secondary_input, sizeof(secondary_input), stdin);
+                    secondary_input[strcspn(secondary_input, "\n")] = '\0';
+
+                    if (strcmp(secondary_input, "yes") == 0) {
+                        app->menu_count = 0;
+                        app->random_menu = false;
+                        printf("\nThe menu is now empty.\n");
+                    }
+
+                    else {
+                        ;
+                    }
+                }
+            }
+
+            else {
+                printf("\nAre you sure? This will make the menu nonexistent.\n");
+
+                fgets(secondary_input, sizeof(secondary_input), stdin);
+                secondary_input[strcspn(secondary_input, "\n")] = '\0';
+
+                if (strcmp(secondary_input, "yes") == 0) {
+                    app->menu_count = 0;
+                    app->random_menu = false;
+                    printf("\nThe menu is now empty.\n");
+                }
+
+                else {
+                    ;
+                }
+            }
+        }
+
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == CALCULATOR) {
             calculator_mode(order, app);
+        }
+
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == RESTORE_MENU) {
+            load_fallback_into_dynamic(menu, app);
+            app->random_menu = false;
+            app->hard_coded_menu = true;
+            printf("\nMenu has been restored.\n");
         }
 
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == WARNING_MODE) {
@@ -410,13 +509,13 @@ void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *orde
             show_upkeep_time(app);
         }
 
+        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == HYPERBOLIC_TIME) {
+            hyperbolic_chamber(order, app);
+        }
+
         if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && (order->debug == SHOW_COMMANDS || order->debug == HELP)) {
             app->show_debug_commands = true;
             show_command();
-        }
-
-        if ((order->num == 0 && order->size == 0 && order->item == 0 && order->modifier == 0) && order->debug == HYPERBOLIC_TIME) {
-            hyperbolic_chamber(order, app);
         }
     }
 }
@@ -534,19 +633,23 @@ void show_command() {
     printf("\nAvailable Commands:\n");
     printf("\n/add_item"); // Implemented.
     printf("\n/sub_item"); // Implemented.
-    // printf("\n/test_order");
+    // printf("\n/multiply_item");
+    // printf("\n/divide_item");
+    printf("\n/test_order"); // Implemented.
     printf("\n/reset_order"); // Implemented.
+    // printf("\n/create_item");
     // printf("\n/edit_order");
     // printf("\n/edit_menu");
     // printf("\n/edit_all");
-    // printf("\n/random_menu");
+    printf("\n/random_menu"); // Implemented.
     // printf("\n/random_order");
-    // printf("\n/restore_menu");
+    printf("\n/restore_menu"); // Implemented.
     printf("\n/show_command"); // Implemented.
     printf("\n/show_tax"); // Implemented.
     printf("\n/change_tax"); // Implemented.
     printf("\n/change_menu"); // Implemented.
     printf("\n/combine_menu"); // Implemented.
+    printf("\n/delete_menu"); // Implemented.
     printf("\n/calculator"); // Implemented.
     printf("\n/warning_mode"); // Implemented.
     printf("\n/time"); // Implemented.
@@ -576,7 +679,10 @@ void show_hardcoded_menu(struct Menu menu) {
 }
 
 void show_dynamic_menu(struct AppState *app) {
-    printf("\nAvailable dynamic menu items: %d\n", app->menu_count);
+    if (app->menu_count > 0) {
+        printf("\nAvailable dynamic menu items: %d\n", app->menu_count);
+    }
+
     for (int i = 0; i < app->menu_count; i++) {
         printf("%s: $%.2lf\n", title_case_converter(dynamic_menu_items[i].name), (dynamic_menu_items[i].price / 100.0));
     }
@@ -595,7 +701,7 @@ void show_order(struct Order all_orders[], struct Menu *menu, struct AppState *a
 
         int price = get_item_price(o.item, menu, app);
         if (price < 0) {
-            continue; // unknown item, skip
+            continue; // Unknown item, skips.
         }
 
         char printable[200];
@@ -889,6 +995,69 @@ void sub_item(struct Order all_orders[], struct Menu *menu, struct Order *order,
     }
 }
 
+void make_random_menu(struct Order all_orders[], struct Menu *menu, struct AppState *app) {
+    // Sets the flag.
+    app->random_menu = true;
+    app->hard_coded_menu = false;
+
+    // Flushes the menu.
+    app->menu_count = 0;
+
+    // Sets a range of allowed ASCII letters.
+    int ascii_min = 97; // a.
+    int ascii_max = 122; // z.
+
+    char *one_word_array[1];
+    char temp_array[12];
+    char dynamic_random_menu[20][12]; // Holds 20 strings, 12 chars long.
+
+    for (int i = 0; i < 20; i++) {
+        int random_ascii_char = (rand() % (ascii_max - ascii_min + 1)) + ascii_min;
+
+        for (int n = 0; n < 11; n++) {
+            // Generate a new random ASCII char for each character.
+            int random_ascii_char = (rand() % (ascii_max - ascii_min + 1)) + ascii_min;
+
+            temp_array[n] = (char)random_ascii_char;
+        }
+
+        temp_array[11] = '\0';
+
+        // Singularizes the name to be correct.
+        char *pointer = temp_array;
+        singularize(pointer);
+
+        strcpy(dynamic_random_menu[i], temp_array);
+
+        // Generates a unique ID based on the ASCII hashing method, among others.
+        int count = 1;
+
+        one_word_array[0] = dynamic_random_menu[i];
+
+        int id = parse_item_words(one_word_array, count);
+        int price = get_item_price(id, menu, app);
+
+        strcpy(dynamic_menu_items[app->menu_count].name, dynamic_random_menu[i]);
+
+        // Stores it into the runtime table (if applicable).
+        if (app->menu_count < 200) {
+            strcpy(dynamic_menu_items[app->menu_count].name, dynamic_random_menu[i]);
+            dynamic_menu_items[app->menu_count].id = id;
+            dynamic_menu_items[app->menu_count].price = price;
+            app->menu_count++;
+        }
+
+        memset(temp_array, 0, sizeof(temp_array)); // Resets the array.
+
+    }
+
+    if (app->show_debug_message) {
+        show_dynamic_menu(app);
+    }
+
+    printf("\nThe menu items and prices have been randomized!\n");
+}
+
 /*
 
 int randomize_menu(struct AppState *app) {
@@ -1082,6 +1251,12 @@ int get_item_price(int id, struct Menu *fallback_menu, struct AppState *app) {
         return price;  // It was found dynamically.
     }
 
+    // If it defaulted to -1.
+    if (price == -1) {
+        int random_number = rand() % 1001;
+        return random_number;
+    }
+
     // Fallsback to the hardcoded menu.
     switch (id) {
         case FRIES:           return fallback_menu->fries;
@@ -1133,12 +1308,23 @@ int get_size_price(int size, struct AppState *app) {
 // Returns price if the ID exists dynamically, otherwise returns -1.
 int match_dynamic_item_id(int id, struct AppState *app) {
     for (int i = 0; i < app->menu_count; i++) {
+        int random_number = rand() % 1001;
+
         if (dynamic_menu_items[i].id == id) {
+
+            // Normal version.
+            if (!app->random_menu) {
+                return dynamic_menu_items[i].price;
+            }
+
+            dynamic_menu_items[i].price = random_number;
             return dynamic_menu_items[i].price;
         }
     }
-    return -1;
+
+    return -1; // The ID was not found.
 }
+
 
 int main() {
     struct AppState app = make_app_state();
@@ -1152,6 +1338,11 @@ int main() {
     struct Order all_orders[100];
 
     struct Menu menu = make_menu(); // Initializes fallback.
+
+
+    // Added on 12-02-2025 at 1:22 AM -NT224.
+    // Makes a seed for randomness.
+    srand(time(NULL));
 
     // Addded on 11-30-2025 at 11:25 AM to incorporate the "/time" command.
     app.start_time = (double)clock() / CLOCKS_PER_SEC;
