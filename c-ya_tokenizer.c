@@ -276,87 +276,91 @@ bool is_item(char word[MAX_LEN]) {
 }
 
 bool is_debug_cmd(char word[MAX_LEN], char input[MAX_LEN]) {
-    if (strcmp(word, "debug") == 0 && input[0] == FORWARDSLASH) {
+    if (input[0] != FORWARDSLASH) {
+        return false;
+    }
+
+    if (strcmp(word, "debug") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "add_item") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "add_item") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "sub_item") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "sub_item") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "test_order") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "test_order") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "reset_order") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "reset_order") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "edit_order") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "edit_order") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "edit_menu") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "edit_menu") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "edit_all") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "edit_all") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "random_menu") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "random_menu") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "random_order") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "random_order") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "restore_menu") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "restore_menu") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "show_command") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "show_command") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "show_tax") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "show_tax") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "change_tax") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "change_tax") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "change_menu") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "change_menu") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "combine_menu") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "combine_menu") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "calculator") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "calculator") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "warning_mode") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "warning_mode") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "time") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "time") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "hyperbolic_time") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "hyperbolic_time") == 0) {
         return true;
     }
 
-    else if (strcmp(word, "help") == 0 && input[0] == FORWARDSLASH) {
+    else if (strcmp(word, "help") == 0) {
         return true;
     }
 
@@ -492,7 +496,7 @@ int tokenize(char input[], struct Order *order_pointer, struct AppState *app_poi
             ;
         }
 
-        else {
+        if (!app_pointer->stress_test && app_pointer->show_debug_message) {
             printf("Token %d: %s\n", i, tokens[i]);
         }
 

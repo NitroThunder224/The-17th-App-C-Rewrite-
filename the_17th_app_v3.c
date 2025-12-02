@@ -1,6 +1,7 @@
 #include "c-ya_tokenizer.h"
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include <time.h> // Added to include the new "/time" command.
 #include "the17th.h"
 
@@ -12,15 +13,16 @@ struct AppState make_app_state();
 struct AppState make_app_state() {
     struct AppState app;
 
-    app.menu_question = false;
+    app.menu_question = true;
     app.debug = true;
     app.debugging = true;
     app.show_debug_commands = true;
+    app.show_debug_message = false;
     app.running = true;
-    app.warning = false;
+    app.warning = true;
     app.hard_coded_menu = false;
     app.safe_mode = false;
-    app.stress_test = true;
+    app.stress_test = false;
     app.tax = 7;
     app.menu_count = 0;
     app.order_count = 0;
@@ -92,6 +94,39 @@ char *name_of_item(int id, struct AppState *app) {
         }
     }
     return "unknown";
+}
+
+char *title_case_converter(char *string) {
+    bool new_word = true;
+
+    for (int i = 0; string[i] != '\0'; i++) {
+        char c = string[i];
+
+        // Treats underscores and hyphens as spaces.
+        if (c == '_' || c == '-') {
+            string[i] = ' ';
+            new_word = true;
+            continue;
+        }
+
+        if (isalpha(c)) {
+            if (new_word) {
+                string[i] = toupper(c);
+                new_word = false;
+            }
+
+            else {
+                string[i] = tolower(c);
+            }
+        }
+
+        else {
+            // Any non-letter character becomes a boundary.
+            new_word = true;
+        }
+    }
+
+    return string;
 }
 
 void *decode_modifier(char *decoded_mod_pointer_1, char *decoded_mod_pointer_2, char *decoded_mod_pointer_3, struct Order order) {
@@ -444,6 +479,8 @@ void hyperbolic_chamber(struct Order *order, struct AppState *app) {
         printf("Total Time : %.6f seconds\n", secs);
         printf("Average    : %.6f microseconds per call\n", micro);
     }
+
+    app->stress_test = false;
 }
 
 
@@ -494,17 +531,17 @@ void show_upkeep_time(struct AppState *app) {
 }
 
 void show_command() {
-    printf("\nAvailable (Future) Commands:\n");
+    printf("\nAvailable Commands:\n");
     printf("\n/add_item"); // Implemented.
     printf("\n/sub_item"); // Implemented.
-    printf("\n/test_order");
+    // printf("\n/test_order");
     printf("\n/reset_order"); // Implemented.
-    printf("\n/edit_order");
-    printf("\n/edit_menu");
-    printf("\n/edit_all");
-    printf("\n/random_menu");
-    printf("\n/random_order");
-    printf("\n/restore_menu");
+    // printf("\n/edit_order");
+    // printf("\n/edit_menu");
+    // printf("\n/edit_all");
+    // printf("\n/random_menu");
+    // printf("\n/random_order");
+    // printf("\n/restore_menu");
     printf("\n/show_command"); // Implemented.
     printf("\n/show_tax"); // Implemented.
     printf("\n/change_tax"); // Implemented.
@@ -536,6 +573,13 @@ void show_hardcoded_menu(struct Menu menu) {
     printf("\nWhite Milk: $%.2f\n", menu.white_milk / 100.0);
     printf("\nJuice: $%.2f\n", menu.juice / 100.0);
     printf("\nWater: $%.2f\n", menu.water / 100.0);
+}
+
+void show_dynamic_menu(struct AppState *app) {
+    printf("\nAvailable dynamic menu items: %d\n", app->menu_count);
+    for (int i = 0; i < app->menu_count; i++) {
+        printf("%s: $%.2lf\n", title_case_converter(dynamic_menu_items[i].name), (dynamic_menu_items[i].price / 100.0));
+    }
 }
 
 void show_order(struct Order all_orders[], struct Menu *menu, struct AppState *app) {
@@ -639,7 +683,7 @@ void checkout(struct Order all_orders[], struct Menu *menu, struct AppState *app
         struct Order o = all_orders[i];
 
         int item_price = get_item_price(o.item, menu, app);
-        int size_price = get_size_price(o.size);
+        int size_price = get_size_price(o.size, app);
 
         if (item_price < 0) {
             printf("Warning: Item ID %d not found.\n", o.item);
@@ -1060,7 +1104,7 @@ int get_item_price(int id, struct Menu *fallback_menu, struct AppState *app) {
     return -1; // Not found at all.
 }
 
-int get_size_price(int size) {
+int get_size_price(int size, struct AppState *app) {
     if (size == SMALL) {
         int size_price = -50;
         return size_price;
@@ -1077,7 +1121,10 @@ int get_size_price(int size) {
     }
 
     else {
-        // printf("\nError: Size does not exist!\n");
+        if (app->show_debug_message) {
+            printf("\nError: Size does not exist!\n");
+        }
+
         return 0;
     }
 
@@ -1109,7 +1156,9 @@ int main() {
     // Addded on 11-30-2025 at 11:25 AM to incorporate the "/time" command.
     app.start_time = (double)clock() / CLOCKS_PER_SEC;
 
-    printf("\n(DEBUG) System online. Counting forevermore till shutdown.\n");
+    if (app.show_debug_message) {
+        printf("\n(DEBUG) System online. Counting forevermore till shutdown.\n");
+    }
 
     // Tries to dynamically load the menu file.
     if (load_menu_file("default_menu.txt", &app) == 0 ||
@@ -1126,27 +1175,30 @@ int main() {
         load_fallback_into_dynamic(&menu, &app);
     }
 
-    printf("\nLoaded dynamic items: %d\n", app.menu_count);
-    for (int i = 0; i < app.menu_count; i++) {
-        printf(" -> %s / id=%d / price=%d\n",
-               dynamic_menu_items[i].name,
-               dynamic_menu_items[i].id,
-               dynamic_menu_items[i].price
-        );
+    if (app.show_debug_message) {
+        printf("\nLoaded dynamic items: %d\n", app.menu_count);
+
+        for (int i = 0; i < app.menu_count; i++) {
+            printf(" -> %s / id=%d / price=%d\n",
+                   dynamic_menu_items[i].name,
+                   dynamic_menu_items[i].id,
+                   dynamic_menu_items[i].price);
+        }
     }
 
-    app.before_action = 0.0;
-    app.after_action = 0.0;
-
     if (app.menu_question) {
-        printf("Hello and welcome to The 17th App! Hot new place in town, yeah?\n");
-        printf("Would you like to see the menu?\n");
+        printf("\nHello and welcome to The 17th App! Hot new place in town, yeah?\n");
+        printf("\nWould you like to see the menu?\n");
         fgets(input, sizeof(input), stdin);
         input[strcspn(input, "\n")] = '\0';  // Removes the newline.
 
         if (strcmp(input, "yes") == 0) {
             if (app.hard_coded_menu) {
                 show_hardcoded_menu(menu);
+            }
+
+            else {
+                show_dynamic_menu(&app);
             }
         }
 
@@ -1184,8 +1236,7 @@ int main() {
             }
 
             else {
-                printf("\nFeature not implemented yet, sorry.\n");
-                continue;
+                show_dynamic_menu(&app);
             }
         }
 

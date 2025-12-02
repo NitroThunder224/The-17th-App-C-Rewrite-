@@ -9,6 +9,7 @@ struct AppState {
     bool debug;
     bool debugging;
     bool show_debug_commands;
+    bool show_debug_message;
     bool running;
     bool warning;
     bool hard_coded_menu;
@@ -120,12 +121,14 @@ extern int menu_count;
 struct Menu make_menu(void);
 
 char *name_of_item(int id, struct AppState *app);
+char *title_case_converter(char *string);
 
 void *decode_modifier(char *decoded_mod_pointer_1, char *decoded_mod_pointer_2, char *decoded_mod_pointer_3, struct Order order);
 void debug_mode(struct Order all_orders[], struct Menu *menu, struct Order *order, struct AppState *app);
 void hyperbolic_chamber(struct Order *order, struct AppState *app);
 void calculator_mode(struct Order *order, struct AppState *app);
 void show_hardcoded_menu(struct Menu menu);
+void show_dynamic_menu(struct AppState *app);
 void show_order(struct Order all_orders[], struct Menu *menu, struct AppState *app);
 void show_command();
 void show_upkeep_time(struct AppState *app);
@@ -140,7 +143,7 @@ bool ends_with_txt(const char *str);
 
 int load_menu_file(const char *filename, struct AppState *app);
 int get_item_price(int id, struct Menu *fallback_menu, struct AppState *app);
-int get_size_price(int size);
+int get_size_price(int size, struct AppState *app);
 int match_dynamic_item_id(int id, struct AppState *app);
 int main();
 
